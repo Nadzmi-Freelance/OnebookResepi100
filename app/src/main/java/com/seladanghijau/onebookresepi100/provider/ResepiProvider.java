@@ -357,19 +357,24 @@ public class ResepiProvider extends SQLiteOpenHelper {
         resepiLangkah = new String[cursorLangkah.getCount()];
         for(int x=0 ; x<cursorLangkah.getCount() ; x++) {
             resepiLangkah[x] = cursorLangkah.getString(cursorLangkah.getColumnIndex("langkahDesc"));
+
+            cursorLangkah.moveToNext();
         }
 
         // get bahan info for resepi
         resepiBahan = new ArrayList<>();
-        for(int x=0 ; x<cursorBahan.getCount() ; x++) {
+        while (!cursorBahan.isAfterLast()) {
             int bahanDesc;
             String bahanName;
 
             bahanDesc = cursorBahan.getInt(cursorBahan.getColumnIndex("bahanDesc"));
             bahanName = cursorBahan.getString(cursorBahan.getColumnIndex("bahanName"));
             resepiBahan.add(new Pair<>(String.valueOf(bahanDesc), bahanName));
+
+            cursorBahan.moveToNext();
         }
 
+        cursorBahan.moveToFirst();
         resepiBahanImg = new Bitmap[cursorBahan.getCount()];
         for(int x=0 ; x<cursorBahan.getCount() ; x++) {
             Bitmap bahanImg;

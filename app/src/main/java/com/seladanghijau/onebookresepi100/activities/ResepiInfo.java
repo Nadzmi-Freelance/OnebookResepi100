@@ -3,15 +3,13 @@ package com.seladanghijau.onebookresepi100.activities;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -19,10 +17,12 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.seladanghijau.onebookresepi100.R;
 import com.seladanghijau.onebookresepi100.adapters.DrawerMenuListAdapter;
-import com.seladanghijau.onebookresepi100.adapters.ResepiInfoAsyncTask;
+import com.seladanghijau.onebookresepi100.adapters.ResepiLangkahAdapter;
+import com.seladanghijau.onebookresepi100.asynctask.ResepiInfoAsyncTask;
 import com.seladanghijau.onebookresepi100.dto.Resepi;
 import com.seladanghijau.onebookresepi100.manager.ResepiManager;
 import com.seladanghijau.onebookresepi100.provider.ILoader;
@@ -34,6 +34,7 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
     ListView lvMenu, lvBahan, lvLangkah;
     ImageView ivResepiImg;
     TabHost thResepiInfo;
+    RelativeLayout rlBottomPanel;
     TextView tvResepiName, tvRingkasan;
 
     // variables
@@ -75,6 +76,7 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         lvBahan = (ListView) findViewById(R.id.lvBahan);
         lvLangkah = (ListView) findViewById(R.id.lvLangkah);
         thResepiInfo = (TabHost) findViewById(R.id.thResepiInfo);
+        rlBottomPanel = (RelativeLayout) findViewById(R.id.rlBottomPanel);
 
         // setup listener
         lvMenu.setOnItemClickListener(this);
@@ -86,16 +88,17 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
 
         setupTabhost(); // setup tabhost
         new ResepiInfoAsyncTask(this, this, resepiManager, namaResepi).execute(); // setup ui
+        setupBottomSheetBehaviour(rlBottomPanel);
     }
     // ---------------------------------------------------------------------------------------------
 
     // listener ------------------------------------------------------------------------------------
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.rlBottomPanel:
-                slide(); // FIXME : bila user click tab, bottomPanel akan slide
-                break;
         }
+    }
+    public void onBackPressed() {
+        slide(rlBottomPanel);
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -119,14 +122,27 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
     // ---------------------------------------------------------------------------------------------
 
     // util methods --------------------------------------------------------------------------------
-    private void slide(View view) {
-        BottomSheetBehavior bottomSheetBehavior;
+    private void slide(View v) {
+        final BottomSheetBehavior bottomSheetBehavior;
 
-        bottomSheetBehavior = BottomSheetBehavior.from(view);
+        bottomSheetBehavior = BottomSheetBehavior.from(v);
         if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        else if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+            finish();
+        else
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    private void setupBottomSheetBehaviour(View v) {
+        final BottomSheetBehavior bottomSheetBehavior;
+
+        bottomSheetBehavior = BottomSheetBehavior.from(v);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            public void onSlide(View bottomSheet, float slideOffset) {}
+            public void onStateChanged(View bottomSheet, int newState) {
+                if(newState == BottomSheetBehavior.STATE_DRAGGING)
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
     }
     // ---------------------------------------------------------------------------------------------
 
@@ -160,8 +176,8 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         ivResepiImg.setImageBitmap(resepiInfo.getResepiImg());
         tvResepiName.setText(resepiInfo.getName());
         tvRingkasan.setText(resepiInfo.getRingkasan());
-        // lvBahan.setAdapter(); FIXME: REMAKE
-        // lvLangkah.setAdapter(); FIXME: REMAKE
+        lvLangkah.setAdapter(new ResepiLangkahAdapter(this, resepiInfo.getLangkah()));
+        // lvBahan.setAdapter(); FIXME: tunjuk list of bahan dalam tab bahan
     }
 
     public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {}

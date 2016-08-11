@@ -19,9 +19,9 @@ import com.seladanghijau.onebookresepi100.R;
  */
 public class ResepiListAdapter extends BaseAdapter {
     private Context context;
+    private LayoutInflater layoutInflater;
     private String[] resepiNameList;
     private Bitmap[] resepiBg;
-    private LayoutInflater layoutInflater;
 
     public ResepiListAdapter(Context context, String[] resepiNameList, Bitmap[] resepiBg) {
         this.context = context;
