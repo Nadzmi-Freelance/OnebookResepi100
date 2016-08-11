@@ -2,6 +2,8 @@ package com.seladanghijau.onebookresepi100.activities;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.renderscript.Type;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,9 +20,12 @@ import android.widget.Toast;
 import com.seladanghijau.onebookresepi100.R;
 import com.seladanghijau.onebookresepi100.adapters.DrawerMenuListAdapter;
 import com.seladanghijau.onebookresepi100.adapters.KategoriResepiListAdapter;
+import com.seladanghijau.onebookresepi100.asynctask.SetupMainActivityListAsyncTask;
+import com.seladanghijau.onebookresepi100.dto.Resepi;
 import com.seladanghijau.onebookresepi100.manager.ResepiManager;
+import com.seladanghijau.onebookresepi100.provider.ILoader;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements ILoader, View.OnClickListener, OnItemClickListener {
     // views
     ActionBar actionBar;
     ImageButton ibMenu, ibSearch;
@@ -31,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int[] resepiCount;
     String[] drawerMenuList, kategoriResepiList;
     ResepiManager resepiManager;
-    TypedArray ikonDrawerMenuList, imejKategoriResepiList;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,25 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initVars() {
         resepiManager = new ResepiManager(this);
-
-        // get resources
-        drawerMenuList = getResources().getStringArray(R.array.drawerMenu);
-        ikonDrawerMenuList = getResources().obtainTypedArray(R.array.ikonDrawerMenu);
-        kategoriResepiList = getResources().getStringArray(R.array.kategoriResepi);
-        imejKategoriResepiList = getResources().obtainTypedArray(R.array.imejKategoriResepi);
-
-        // calc resepi coutn for every category
-        resepiCount = new int[kategoriResepiList.length];
-        for(int x=0 ; x<kategoriResepiList.length ; x++) {
-            int count;
-
-            count = resepiManager.getResepiCount(resepiManager.getResepiCategoryId(kategoriResepiList[x]));
-            resepiCount[x] = count;
-        }
-
-        // setup listview adapter
-        lvMenu.setAdapter(new DrawerMenuListAdapter(this, drawerMenuList, ikonDrawerMenuList));
-        lvKategoriResepi.setAdapter(new KategoriResepiListAdapter(this, kategoriResepiList, imejKategoriResepiList, resepiCount));
+        new SetupMainActivityListAsyncTask(this, this, resepiManager).execute();
     }
 
     public void onClick(View v) {
@@ -123,4 +109,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+    // resepi loader interface ---------------------------------------------------------------------
+    public void onLoadMenuDrawer(String[] drawerMenuList, TypedArray ikonDrawerMenuList) {
+        lvMenu.setAdapter(new DrawerMenuListAdapter(this, drawerMenuList, ikonDrawerMenuList));
+
+        this.drawerMenuList = drawerMenuList;
+    }
+
+    public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {
+        // setup listview adapter
+        lvKategoriResepi.setAdapter(new KategoriResepiListAdapter(this, kategoriResepiList, imejKategoriResepiList, resepiCount));
+
+        this.resepiCount = resepiCount;
+        this.kategoriResepiList = kategoriResepiList;
+    }
+
+    public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
+    public void onLoad(Resepi resepiInfo) {}
+    // ---------------------------------------------------------------------------------------------
 }

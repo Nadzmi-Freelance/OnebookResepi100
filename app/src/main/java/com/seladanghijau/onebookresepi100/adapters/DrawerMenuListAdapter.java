@@ -36,18 +36,23 @@ public class DrawerMenuListAdapter extends BaseAdapter {
     public long getItemId(int position) { return position; }
 
     public View getView(int position, View convertView, ViewGroup parent) {
+        Holder viewHolder;
+
+        viewHolder = new Holder();
+        viewHolder.rowView = layoutInflater.inflate(R.layout.layout_drawer_menu, null);
+
+        viewHolder.tempImageView = (ImageView) viewHolder.rowView.findViewById(R.id.ivMenuIcon);
+        viewHolder.tempTextView = (TextView) viewHolder.rowView.findViewById(R.id.tvMenuTitle);
+
+        viewHolder.tempImageView.setBackground(menuIconList.getDrawable(position));
+        viewHolder.tempTextView.setText(menuList[position]);
+
+        return viewHolder.rowView;
+    }
+
+    static class Holder {
         View rowView;
         TextView tempTextView;
         ImageView tempImageView;
-
-        rowView = layoutInflater.inflate(R.layout.layout_drawer_menu, null);
-
-        tempImageView = (ImageView) rowView.findViewById(R.id.ivMenuIcon);
-        tempTextView = (TextView) rowView.findViewById(R.id.tvMenuTitle);
-
-        tempImageView.setBackground(menuIconList.getDrawable(position));
-        tempTextView.setText(menuList[position]);
-
-        return rowView;
     }
 }

@@ -17,22 +17,24 @@ import android.widget.Toast;
 import com.seladanghijau.onebookresepi100.R;
 import com.seladanghijau.onebookresepi100.adapters.DrawerMenuListAdapter;
 import com.seladanghijau.onebookresepi100.adapters.ResepiListAdapter;
+import com.seladanghijau.onebookresepi100.asynctask.SetupResepiListAsyncTask;
+import com.seladanghijau.onebookresepi100.dto.Resepi;
 import com.seladanghijau.onebookresepi100.manager.ResepiManager;
+import com.seladanghijau.onebookresepi100.provider.ILoader;
 
 import java.util.ArrayList;
 
-public class ResepiList extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class ResepiList extends AppCompatActivity implements ILoader, AdapterView.OnItemClickListener {
     // views
     ActionBar actionBar;
     ImageButton ibMenu, ibSearch;
     ListView lvMenu, lvResepiList;
 
     // variables
-    ResepiManager resepiManager;
     int category;
+    String categoryName;
+    ResepiManager resepiManager;
     String[] drawerMenuList, resepiNameList;
-    Bitmap[] bgResepiList;
-    TypedArray ikonDrawerMenuList;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,37 +70,9 @@ public class ResepiList extends AppCompatActivity implements AdapterView.OnItemC
     }
 
     private void initVars() {
-        ArrayList<Pair<String, Bitmap>> resepiNameListWithImg;
-        String categoryName;
-
         resepiManager = new ResepiManager(this);
-
         categoryName = getIntent().getStringExtra("kategori_resepi");
-        category = resepiManager.getResepiCategoryId(categoryName);
-
-        // get resources
-        drawerMenuList = getResources().getStringArray(R.array.drawerMenu);
-        ikonDrawerMenuList = getResources().obtainTypedArray(R.array.ikonDrawerMenu);
-        // resepi namelist with bg
-        resepiNameListWithImg = resepiManager.getResepiNameListWithImg(category);
-        resepiNameList = new String[resepiNameListWithImg.size()];
-        bgResepiList = new Bitmap[resepiNameListWithImg.size()];
-        for(int x=0 ; x<resepiNameListWithImg.size() ; x++) {
-            Pair<String, Bitmap> stringBitmapPair;
-            String resepiName;
-            Bitmap resepiBg;
-
-            stringBitmapPair = resepiNameListWithImg.get(x);
-            resepiName = stringBitmapPair.first;
-            resepiBg = stringBitmapPair.second;
-
-            resepiNameList[x] = resepiName;
-            bgResepiList[x] = resepiBg;
-        }
-
-        // setup listview adapter
-        lvMenu.setAdapter(new DrawerMenuListAdapter(this, drawerMenuList, ikonDrawerMenuList));
-        lvResepiList.setAdapter(new ResepiListAdapter(this, resepiNameList, bgResepiList));
+        new SetupResepiListAsyncTask(this, this, resepiManager, categoryName).execute();
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -122,4 +96,22 @@ public class ResepiList extends AppCompatActivity implements AdapterView.OnItemC
                 break;
         }
     }
+
+    // interface methods ---------------------------------------------------------------------------
+    public void onLoadMenuDrawer(String[] drawerMenuList, TypedArray ikonDrawerMenuList) {
+        lvMenu.setAdapter(new DrawerMenuListAdapter(this, drawerMenuList, ikonDrawerMenuList));
+
+        this.drawerMenuList = drawerMenuList;
+    }
+
+    public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {
+        lvResepiList.setAdapter(new ResepiListAdapter(this, resepiNameList, bgResepiList));
+
+        this.category = category;
+        this.resepiNameList = resepiNameList;
+    }
+
+    public void onLoad(Resepi resepiInfo) {}
+    public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {}
+    // ---------------------------------------------------------------------------------------------
 }

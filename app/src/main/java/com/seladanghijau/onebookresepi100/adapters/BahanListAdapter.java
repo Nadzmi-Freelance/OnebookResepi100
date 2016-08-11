@@ -25,8 +25,14 @@ public class BahanListAdapter extends BaseAdapter { // FIXME - REMAKE
     public long getItemId(int position) { return 0; }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        View rowView;
+        Holder viewHolder;
+
+        viewHolder = new Holder();
 
         return null;
+    }
+
+    static class Holder {
+        View rowView;
     }
 }

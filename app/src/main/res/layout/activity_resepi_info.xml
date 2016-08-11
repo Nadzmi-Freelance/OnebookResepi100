@@ -92,7 +92,7 @@
 
         <!-- bottom panel -->
         <RelativeLayout
-            android:id="@+id/bottomPanel"
+            android:id="@+id/rlBottomPanel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
