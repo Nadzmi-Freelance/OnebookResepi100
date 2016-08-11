@@ -23,9 +23,8 @@ public class SetupResepiListAsyncTask extends AsyncTask<Void, Void, Void> {
 
     private String categoryName;
     private int category;
-    private String[] drawerMenuList, resepiNameList;
+    private String[] resepiNameList;
     private Bitmap[] bgResepiList;
-    private TypedArray ikonDrawerMenuList;
     private ResepiManager resepiManager;
     private ArrayList<Pair<String, Bitmap>> resepiNameListWithImg;
 
@@ -47,7 +46,6 @@ public class SetupResepiListAsyncTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
 
-        loader.onLoadMenuDrawer(drawerMenuList, ikonDrawerMenuList); // load menu
         loader.onLoad(category, resepiNameList, bgResepiList); // load resepi list
 
         if(progressDialog.isShowing())
@@ -56,10 +54,6 @@ public class SetupResepiListAsyncTask extends AsyncTask<Void, Void, Void> {
 
     protected Void doInBackground(Void... params) {
         category = resepiManager.getResepiCategoryId(categoryName);
-
-        // get resources
-        drawerMenuList = context.getResources().getStringArray(R.array.drawerMenu);
-        ikonDrawerMenuList = context.getResources().obtainTypedArray(R.array.ikonDrawerMenu);
 
         // resepi namelist with bg
         resepiNameListWithImg = resepiManager.getResepiNameListWithImg(category);

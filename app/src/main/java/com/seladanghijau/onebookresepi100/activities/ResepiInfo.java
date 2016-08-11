@@ -5,9 +5,11 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 import com.seladanghijau.onebookresepi100.R;
 import com.seladanghijau.onebookresepi100.adapters.DrawerMenuListAdapter;
 import com.seladanghijau.onebookresepi100.adapters.ResepiLangkahAdapter;
+import com.seladanghijau.onebookresepi100.asynctask.DrawerMenuListAsyncTask;
 import com.seladanghijau.onebookresepi100.asynctask.ResepiInfoAsyncTask;
 import com.seladanghijau.onebookresepi100.dto.Resepi;
 import com.seladanghijau.onebookresepi100.manager.ResepiManager;
@@ -29,13 +32,14 @@ import com.seladanghijau.onebookresepi100.provider.ILoader;
 
 public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnClickListener, AdapterView.OnItemClickListener {
     // views
-    ActionBar actionBar;
+    View actionbarView;
     ImageButton ibMenu, ibSearch;
     ListView lvMenu, lvBahan, lvLangkah;
     ImageView ivResepiImg;
     TabHost thResepiInfo;
     RelativeLayout rlBottomPanel;
-    TextView tvResepiName, tvRingkasan;
+    DrawerLayout drawer;
+    TextView tvResepiName, tvRingkasan, tvTitle;
 
     // variables
     String namaResepi;
@@ -53,22 +57,16 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
 
     // initialization ------------------------------------------------------------------------------
     private void initViews() {
-        LayoutInflater actionBarInflater;
-        View customActionBarView;
-
-        // setup custom actionbar
-        actionBar = getSupportActionBar();
-        actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBarInflater = LayoutInflater.from(this);
-        customActionBarView = actionBarInflater.inflate(R.layout.custom_actionbar, null);
-
-        actionBar.setCustomView(customActionBarView);
-        actionBar.setDisplayShowCustomEnabled(true);
+        // setup actionbar
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.custom_actionbar);
+        actionbarView = getSupportActionBar().getCustomView();
 
         // setup views
-        ibMenu = (ImageButton) customActionBarView.findViewById(R.id.ibMenu);
-        ibSearch = (ImageButton) customActionBarView.findViewById(R.id.ibSearch);
+        ibMenu = (ImageButton) actionbarView.findViewById(R.id.ibMenu);
+        ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch);
+        tvTitle = (TextView) actionbarView.findViewById(R.id.tvTitle);
         ivResepiImg = (ImageView) findViewById(R.id.ivResepiImg);
         tvResepiName = (TextView) findViewById(R.id.tvResepiName);
         tvRingkasan = (TextView) findViewById(R.id.tvRingkasan);
@@ -77,8 +75,11 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         lvLangkah = (ListView) findViewById(R.id.lvLangkah);
         thResepiInfo = (TabHost) findViewById(R.id.thResepiInfo);
         rlBottomPanel = (RelativeLayout) findViewById(R.id.rlBottomPanel);
+        drawer = (DrawerLayout) findViewById(R.id.drawer);
 
         // setup listener
+        ibMenu.setOnClickListener(this);
+        ibSearch.setOnClickListener(this);
         lvMenu.setOnItemClickListener(this);
     }
 
@@ -87,6 +88,7 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         namaResepi = getIntent().getStringExtra("nama_resepi");
 
         setupTabhost(); // setup tabhost
+        new DrawerMenuListAsyncTask(this, this).execute();
         new ResepiInfoAsyncTask(this, this, resepiManager, namaResepi).execute(); // setup ui
         setupBottomSheetBehaviour(rlBottomPanel);
     }
@@ -95,8 +97,12 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
     // listener ------------------------------------------------------------------------------------
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ibMenu:
+                slideDrawer(drawer);
+                break;
         }
     }
+
     public void onBackPressed() {
         slide(rlBottomPanel);
     }
@@ -104,6 +110,8 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.lvMenu:
+                finish();
+
                 if(position == 0)
                     startActivity(new Intent(this, MainActivity.class));
                 else if(position == 1)
@@ -119,6 +127,26 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
                 break;
         }
     }
+    // ---------------------------------------------------------------------------------------------
+
+    // interface methods ---------------------------------------------------------------------------
+    public void onLoadMenuDrawer(String[] drawerMenuList, TypedArray ikonDrawerMenuList) {
+        lvMenu.setAdapter(new DrawerMenuListAdapter(this, drawerMenuList, ikonDrawerMenuList));
+
+        this.drawerMenuList = drawerMenuList;
+    }
+
+    public void onLoad(Resepi resepiInfo) {
+        ivResepiImg.setImageBitmap(resepiInfo.getResepiImg());
+        tvResepiName.setText(resepiInfo.getName());
+        tvRingkasan.setText(resepiInfo.getRingkasan());
+        lvLangkah.setAdapter(new ResepiLangkahAdapter(this, resepiInfo.getLangkah()));
+        // lvBahan.setAdapter(); FIXME: tunjuk list of bahan dalam tab bahan
+    }
+
+    public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {}
+    public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {}
+    public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
     // ---------------------------------------------------------------------------------------------
 
     // util methods --------------------------------------------------------------------------------
@@ -144,6 +172,13 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
             }
         });
     }
+
+    private void slideDrawer(DrawerLayout drawer) {
+        if(drawer.isDrawerOpen(Gravity.LEFT))
+            drawer.closeDrawer(Gravity.LEFT);
+        else if(!drawer.isDrawerOpen(Gravity.LEFT))
+            drawer.openDrawer(Gravity.LEFT);
+    }
     // ---------------------------------------------------------------------------------------------
 
     // other methods -------------------------------------------------------------------------------
@@ -165,22 +200,5 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         thResepiInfo.addTab(tsBahan);
         thResepiInfo.addTab(tsLangkah);
     }
-    // ---------------------------------------------------------------------------------------------
-
-    // interface methods ---------------------------------------------------------------------------
-    public void onLoadMenuDrawer(String[] drawerMenuList, TypedArray ikonDrawerMenuList) {
-        lvMenu.setAdapter(new DrawerMenuListAdapter(this, drawerMenuList, ikonDrawerMenuList));
-    }
-
-    public void onLoad(Resepi resepiInfo) {
-        ivResepiImg.setImageBitmap(resepiInfo.getResepiImg());
-        tvResepiName.setText(resepiInfo.getName());
-        tvRingkasan.setText(resepiInfo.getRingkasan());
-        lvLangkah.setAdapter(new ResepiLangkahAdapter(this, resepiInfo.getLangkah()));
-        // lvBahan.setAdapter(); FIXME: tunjuk list of bahan dalam tab bahan
-    }
-
-    public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {}
-    public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
     // ---------------------------------------------------------------------------------------------
 }

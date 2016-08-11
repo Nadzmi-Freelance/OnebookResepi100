@@ -20,8 +20,6 @@ public class ResepiInfoAsyncTask extends AsyncTask<Void, Void, Void> {
     private Resepi resepiInfo;
     private String namaResepi;
     private int resepiId;
-    private TypedArray ikonDrawerMenuList;
-    private String[] drawerMenuList;
 
     public ResepiInfoAsyncTask(Context context, ILoader loader, ResepiManager resepiManager, String namaResepi) {
         this.context = context;
@@ -33,17 +31,12 @@ public class ResepiInfoAsyncTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
 
-        loader.onLoadMenuDrawer(drawerMenuList, ikonDrawerMenuList);
         loader.onLoad(resepiInfo);
     }
 
     protected Void doInBackground(Void... params) {
         resepiId = resepiManager.getResepiId(namaResepi);
         resepiInfo = resepiManager.getResepiInfo(resepiId);
-
-        // get resources
-        drawerMenuList = context.getResources().getStringArray(R.array.drawerMenu);
-        ikonDrawerMenuList = context.getResources().obtainTypedArray(R.array.ikonDrawerMenu);
 
         return null;
     }

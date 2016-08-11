@@ -34,6 +34,10 @@ public class ResepiManager {
         return resepiProvider.getResepiList(resepiCategory);
     }
 
+    public ArrayList<Pair<String, Bitmap>> getFavoriteResepi() {
+        return resepiProvider.getFavoriteResepi();
+    }
+
     public String[] getResepiNameList(int resepiCategory) {
         return resepiProvider.getResepiNameList(resepiCategory);
     }

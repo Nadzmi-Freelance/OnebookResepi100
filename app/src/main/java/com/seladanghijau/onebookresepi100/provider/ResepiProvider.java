@@ -226,6 +226,36 @@ public class ResepiProvider extends SQLiteOpenHelper {
         return resepiNameWithImgList;
     }
 
+    public ArrayList<Pair<String, Bitmap>> getFavoriteResepi() {
+        ArrayList<Pair<String, Bitmap>> resepiNameWithImgList;
+        SQLiteDatabase sqliteDB;
+        Cursor cursor;
+        String sql;
+
+        sqliteDB = SQLiteDatabase.openDatabase(DB_PATH, null, SQLiteDatabase.OPEN_READWRITE); // read sqlite db
+
+        sql = "SELECT resepiName, resepiGambar FROM resepi WHERE resepiFavorite LIKE '1'"; // sql query
+        cursor = sqliteDB.rawQuery(sql, null); // cursor for queried data
+
+        cursor.moveToFirst(); // move cursor to first index
+        resepiNameWithImgList = new ArrayList<>();
+        while (!cursor.isAfterLast()) {
+            String resepiName;
+            Bitmap resepiImg;
+
+            resepiName = cursor.getString(cursor.getColumnIndex("resepiName"));
+            resepiImg = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")));
+            resepiNameWithImgList.add(new Pair<>(resepiName, resepiImg));
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        sqliteDB.close();
+
+        return resepiNameWithImgList;
+    }
+
     public ArrayList<Pair<String, Bitmap>> getResepiNameListWithImg() {
         ArrayList<Pair<String, Bitmap>> resepiNameWithImgList;
         SQLiteDatabase sqliteDB;

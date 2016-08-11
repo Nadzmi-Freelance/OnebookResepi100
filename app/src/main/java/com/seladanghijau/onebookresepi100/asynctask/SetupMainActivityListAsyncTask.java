@@ -18,9 +18,9 @@ public class SetupMainActivityListAsyncTask extends AsyncTask<Void, Void, Void> 
     private ILoader loader;
 
     private int[] resepiCount;
-    private String[] drawerMenuList, kategoriResepiList;
+    private String[] kategoriResepiList;
     private ResepiManager resepiManager;
-    private TypedArray ikonDrawerMenuList, imejKategoriResepiList;
+    private TypedArray imejKategoriResepiList;
 
     public SetupMainActivityListAsyncTask(Context context, ILoader loader, ResepiManager resepiManager) {
         this.context = context;
@@ -38,8 +38,6 @@ public class SetupMainActivityListAsyncTask extends AsyncTask<Void, Void, Void> 
 
     protected Void doInBackground(Void... params) {
         // get resources
-        drawerMenuList = context.getResources().getStringArray(R.array.drawerMenu);
-        ikonDrawerMenuList = context.getResources().obtainTypedArray(R.array.ikonDrawerMenu);
         kategoriResepiList = context.getResources().getStringArray(R.array.kategoriResepi);
         imejKategoriResepiList = context.getResources().obtainTypedArray(R.array.imejKategoriResepi);
 
@@ -58,7 +56,6 @@ public class SetupMainActivityListAsyncTask extends AsyncTask<Void, Void, Void> 
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
 
-        loader.onLoadMenuDrawer(drawerMenuList, ikonDrawerMenuList); // load menu drawer
         loader.onLoad(resepiCount, kategoriResepiList, imejKategoriResepiList); // load kategori list
 
         if(progressDialog.isShowing())

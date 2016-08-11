@@ -13,4 +13,5 @@ public interface ILoader {
     void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList); // for main activity
     void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList); // for resepilist activity
     void onLoad(Resepi resepiInfo); // for resepiinfo activity
+    void onLoad(String[] resepiNameList, Bitmap[] bgResepiList);
 }
