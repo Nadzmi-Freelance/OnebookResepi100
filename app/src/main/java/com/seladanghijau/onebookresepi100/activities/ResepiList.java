@@ -68,6 +68,9 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
         ibSearch.setOnClickListener(this);
         lvMenu.setOnItemClickListener(this);
         lvResepiList.setOnItemClickListener(this);
+
+        lvMenu.invalidate();
+        lvResepiList.invalidate();
     }
 
     private void initVars() {

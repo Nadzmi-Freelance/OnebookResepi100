@@ -64,6 +64,8 @@ public class TentangKami extends AppCompatActivity implements ILoader, View.OnCl
         lvMenu.setOnItemClickListener(this);
         tvWebPage.setOnClickListener(this);
         tvEmail.setOnClickListener(this);
+
+        lvMenu.invalidate();
     }
 
     private void initVars() {

@@ -68,6 +68,8 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
         lvMenu.setOnItemClickListener(this);
         tvWebAdddress.setOnClickListener(this);
         btnMuatTurun.setOnClickListener(this);
+
+        lvMenu.invalidate();
     }
 
     private void initVars() {

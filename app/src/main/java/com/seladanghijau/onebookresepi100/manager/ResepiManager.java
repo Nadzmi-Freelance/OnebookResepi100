@@ -38,6 +38,10 @@ public class ResepiManager {
         return resepiProvider.getFavoriteResepi();
     }
 
+    public void addFavorite(int resepiId) {
+        resepiProvider.addFavorite(resepiId);
+    }
+
     public String[] getResepiNameList(int resepiCategory) {
         return resepiProvider.getResepiNameList(resepiCategory);
     }

@@ -20,7 +20,9 @@ import com.seladanghijau.onebookresepi100.R;
 import com.seladanghijau.onebookresepi100.adapters.DrawerMenuListAdapter;
 import com.seladanghijau.onebookresepi100.adapters.ResepiListAdapter;
 import com.seladanghijau.onebookresepi100.asynctask.DrawerMenuListAsyncTask;
+import com.seladanghijau.onebookresepi100.asynctask.FavoriteListAsyncTask;
 import com.seladanghijau.onebookresepi100.dto.Resepi;
+import com.seladanghijau.onebookresepi100.manager.ResepiManager;
 import com.seladanghijau.onebookresepi100.provider.ILoader;
 
 public class Favorite extends AppCompatActivity implements ILoader, View.OnClickListener, AdapterView.OnItemClickListener {
@@ -32,6 +34,7 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
     DrawerLayout drawer;
 
     // variables
+    ResepiManager resepiManager;
     String[] drawerMenuList, resepiNameList;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +66,16 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
         ibSearch.setOnClickListener(this);
         lvMenu.setOnItemClickListener(this);
         lvFavorite.setOnItemClickListener(this);
+
+        lvFavorite.invalidate();
+        lvMenu.invalidate();
     }
 
     private void initVars() {
+        resepiManager = new ResepiManager(this);
+
         new DrawerMenuListAsyncTask(this, this).execute();
+        new FavoriteListAsyncTask(this, this, resepiManager).execute();
     }
     // ---------------------------------------------------------------------------------------------
 
@@ -102,6 +111,7 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
                     startActivity(new Intent(this, TentangKami.class));
                 break;
             case R.id.lvFavorite:
+                startActivity(new Intent(this, ResepiList.class).putExtra("kategori_resepi", drawerMenuList[position]));
                 break;
         }
     }

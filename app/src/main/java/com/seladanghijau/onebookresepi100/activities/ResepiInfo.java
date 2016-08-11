@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
@@ -40,8 +41,10 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
     RelativeLayout rlBottomPanel;
     DrawerLayout drawer;
     TextView tvResepiName, tvRingkasan, tvTitle;
+    LinearLayout llFavourite, llShare;
 
     // variables
+    int resepiId;
     String namaResepi;
     String[] drawerMenuList;
     ResepiManager resepiManager;
@@ -76,11 +79,19 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         thResepiInfo = (TabHost) findViewById(R.id.thResepiInfo);
         rlBottomPanel = (RelativeLayout) findViewById(R.id.rlBottomPanel);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
+        llFavourite = (LinearLayout) findViewById(R.id.llFavourite);
+        llShare = (LinearLayout) findViewById(R.id.llShare);
 
         // setup listener
         ibMenu.setOnClickListener(this);
         ibSearch.setOnClickListener(this);
+        llFavourite.setOnClickListener(this);
+        llShare.setOnClickListener(this);
         lvMenu.setOnItemClickListener(this);
+
+        lvLangkah.invalidate();
+        lvBahan.invalidate();
+        lvMenu.invalidate();
     }
 
     private void initVars() {
@@ -99,6 +110,12 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         switch (v.getId()) {
             case R.id.ibMenu:
                 slideDrawer(drawer);
+                break;
+            case R.id.llFavourite:
+                resepiManager.addFavorite(resepiId);
+                Toast.makeText(this, "Added to favorite", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.llShare:
                 break;
         }
     }
@@ -137,6 +154,8 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
     }
 
     public void onLoad(Resepi resepiInfo) {
+        resepiId = resepiInfo.getId();
+
         ivResepiImg.setImageBitmap(resepiInfo.getResepiImg());
         tvResepiName.setText(resepiInfo.getName());
         tvRingkasan.setText(resepiInfo.getRingkasan());

@@ -56,6 +56,8 @@ public class TipMasakan extends AppCompatActivity implements ILoader, View.OnCli
         ibMenu.setOnClickListener(this);
         ibSearch.setOnClickListener(this);
         lvMenu.setOnItemClickListener(this);
+
+        lvMenu.invalidate();
     }
 
     private void initVars() {

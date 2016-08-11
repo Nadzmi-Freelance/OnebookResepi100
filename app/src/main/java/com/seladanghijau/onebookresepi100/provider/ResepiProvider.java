@@ -226,6 +226,19 @@ public class ResepiProvider extends SQLiteOpenHelper {
         return resepiNameWithImgList;
     }
 
+    public void addFavorite(int resepiId) {
+        SQLiteDatabase sqliteDB;
+        Cursor cursor;
+        String sql;
+
+        sqliteDB = SQLiteDatabase.openDatabase(DB_PATH, null, SQLiteDatabase.OPEN_READWRITE); // read sqlite db
+
+        sql = "UPDATE resepi SET resepiFavorite='1' WHERE resepiId LIKE '" + resepiId + "'"; // sql query
+        sqliteDB.execSQL(sql);
+
+        sqliteDB.close();
+    }
+
     public ArrayList<Pair<String, Bitmap>> getFavoriteResepi() {
         ArrayList<Pair<String, Bitmap>> resepiNameWithImgList;
         SQLiteDatabase sqliteDB;

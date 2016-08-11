@@ -70,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements ILoader, View.OnC
         ibSearch.setOnClickListener(this);
         lvMenu.setOnItemClickListener(this);
         lvKategoriResepi.setOnItemClickListener(this);
+
+        lvKategoriResepi.invalidate();
+        lvMenu.invalidate();
     }
 
     private void initVars() {
