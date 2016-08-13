@@ -11,6 +11,7 @@ import com.seladanghijau.onebookresepi100.dto.Resepi;
 public interface ILoader {
     void onLoadMenuDrawer(String[] drawerMenuList, TypedArray ikonDrawerMenuList);
     void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList); // for main activity
+    void onLoad(int[] resepiCount, String[] kategoriResepiList, Bitmap[] imejKategoriResepiList);
     void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList); // for resepilist activity
     void onLoad(Resepi resepiInfo); // for resepiinfo activity
     void onLoad(String[] resepiNameList, Bitmap[] bgResepiList);

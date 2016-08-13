@@ -75,10 +75,35 @@ public class ResepiProvider extends SQLiteOpenHelper {
     // ---------------------------------------------------------------------------------------------
 
     // util methods --------------------------------------------------------------------------------
-    private static Bitmap byteArrayToBitmap(byte[] resepiByteArray) {
-        return BitmapFactory.decodeByteArray(resepiByteArray, 0, resepiByteArray.length);
+    private static Bitmap byteArrayToBitmap(byte[] resepiByteArray, int reqWidth, int reqHeight) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+
+        options.inJustDecodeBounds = true;
+        options.inSampleSize = calculateinSampleSize(options, reqWidth, reqHeight);
+        options.inJustDecodeBounds = false;
+
+        return BitmapFactory.decodeByteArray(resepiByteArray, 0, resepiByteArray.length, options);
     }
 
+    private static int calculateinSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int width = options.outWidth;
+        final int height = options.outHeight;
+        int sampleSize = 2;
+
+        if(reqWidth == 0 || reqHeight == 0) return sampleSize;
+
+        if(width > reqWidth || height > reqHeight) {
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+            sampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+
+        return sampleSize;
+    }
+    // ---------------------------------------------------------------------------------------------
+
+    // provider methods ----------------------------------------------------------------------------
     public ArrayList<Resepi> getResepiList() {
         ArrayList<Resepi> resepiList;
         SQLiteDatabase sqliteDB;
@@ -100,7 +125,7 @@ public class ResepiProvider extends SQLiteOpenHelper {
             resepiId = cursor.getInt(cursor.getColumnIndex("resepiId"));
             resepiName = cursor.getString(cursor.getColumnIndex("resepiName"));
             resepiCategory = cursor.getInt(cursor.getColumnIndex("resepiCategory"));
-            resepiImg = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")));
+            resepiImg = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")), 300, 200);
             resepiList.add(new Resepi(resepiId, resepiName, resepiCategory, resepiImg));
 
             cursor.moveToNext();
@@ -132,7 +157,7 @@ public class ResepiProvider extends SQLiteOpenHelper {
 
             resepiId = cursor.getInt(cursor.getColumnIndex("resepiId"));
             resepiName = cursor.getString(cursor.getColumnIndex("resepiName"));
-            resepiImg = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")));
+            resepiImg = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")), 300, 200);
             resepiList.add(new Resepi(resepiId, resepiName, resepiImg));
 
             cursor.moveToNext();
@@ -214,7 +239,7 @@ public class ResepiProvider extends SQLiteOpenHelper {
             Bitmap resepiImg;
 
             resepiName = cursor.getString(cursor.getColumnIndex("resepiName"));
-            resepiImg = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")));
+            resepiImg = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")), 300, 200);
             resepiNameWithImgList.add(new Pair<>(resepiName, resepiImg));
 
             cursor.moveToNext();
@@ -228,7 +253,6 @@ public class ResepiProvider extends SQLiteOpenHelper {
 
     public void addFavorite(int resepiId) {
         SQLiteDatabase sqliteDB;
-        Cursor cursor;
         String sql;
 
         sqliteDB = SQLiteDatabase.openDatabase(DB_PATH, null, SQLiteDatabase.OPEN_READWRITE); // read sqlite db
@@ -257,7 +281,7 @@ public class ResepiProvider extends SQLiteOpenHelper {
             Bitmap resepiImg;
 
             resepiName = cursor.getString(cursor.getColumnIndex("resepiName"));
-            resepiImg = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")));
+            resepiImg = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")), 300, 200);
             resepiNameWithImgList.add(new Pair<>(resepiName, resepiImg));
 
             cursor.moveToNext();
@@ -287,7 +311,7 @@ public class ResepiProvider extends SQLiteOpenHelper {
             Bitmap resepiImg;
 
             resepiName = cursor.getString(cursor.getColumnIndex("resepiName"));
-            resepiImg = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")));
+            resepiImg = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")), 300, 200);
             resepiNameWithImgList.add(new Pair<>(resepiName, resepiImg));
 
             cursor.moveToNext();
@@ -317,6 +341,33 @@ public class ResepiProvider extends SQLiteOpenHelper {
         sqliteDB.close();
 
         return categoryId;
+    }
+
+    public ArrayList<Pair<String, Bitmap>> getResepiCategoryListWithImg(int categoryId) {
+        ArrayList<Pair<String, Bitmap>> resepiCategory;
+        SQLiteDatabase sqliteDB;
+        Cursor cursor;
+        String sql;
+
+        sqliteDB = SQLiteDatabase.openDatabase(DB_PATH, null, SQLiteDatabase.OPEN_READWRITE); // read sqlite db
+
+        sql = "SELECT categoryDesc, categoryGambar FROM lookupresepicategory WHERE categoryId LIKE '" + categoryId + "'"; // sql query
+        cursor = sqliteDB.rawQuery(sql, null); // cursor for queried data
+
+        cursor.moveToFirst(); // move cursor to first index
+        resepiCategory = new ArrayList<>();
+        while (!cursor.isAfterLast()) {
+            String categoryName = cursor.getString(cursor.getColumnIndex("categoryDesc"));
+            Bitmap categoryGambar = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("categoryGambar")), 300, 200);
+
+            resepiCategory.add(new Pair<>(categoryName, categoryGambar));
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        sqliteDB.close();
+
+        return resepiCategory;
     }
 
     public int getResepiId(String resepiName) {
@@ -394,7 +445,7 @@ public class ResepiProvider extends SQLiteOpenHelper {
         resepiName = cursor.getString(cursor.getColumnIndex("resepiName"));
         resepiCategory = cursor.getInt(cursor.getColumnIndex("resepiCategory"));
         resepiRingkasan = cursor.getString(cursor.getColumnIndex("resepiRingkasan"));
-        resepiGambar = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")));
+        resepiGambar = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")), 300, 200);
 
         // get langkah info for resepi
         resepiLangkah = new String[cursorLangkah.getCount()];
@@ -422,7 +473,7 @@ public class ResepiProvider extends SQLiteOpenHelper {
         for(int x=0 ; x<cursorBahan.getCount() ; x++) {
             Bitmap bahanImg;
 
-            bahanImg = byteArrayToBitmap(cursorBahan.getBlob(cursorBahan.getColumnIndex("bahanGambar")));
+            bahanImg = byteArrayToBitmap(cursorBahan.getBlob(cursorBahan.getColumnIndex("bahanGambar")), 300, 200);
             resepiBahanImg[x] = bahanImg;
         }
 

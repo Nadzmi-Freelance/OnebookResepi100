@@ -62,6 +62,10 @@ public class ResepiManager {
         return resepiProvider.getResepiCategoryId(categoryName);
     }
 
+    public ArrayList<Pair<String, Bitmap>> getResepiCategoryListWithImg(int categoryId) {
+        return resepiProvider.getResepiCategoryListWithImg(categoryId);
+    }
+
     public int getResepiId(String resepiName) {
         return resepiProvider.getResepiId(resepiName);
     }

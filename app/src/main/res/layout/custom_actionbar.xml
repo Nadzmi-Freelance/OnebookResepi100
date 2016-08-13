@@ -12,7 +12,6 @@
         android:background="@drawable/ic_menu_black_24dp" />
     
     <TextView
-        android:text="Home"
         android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

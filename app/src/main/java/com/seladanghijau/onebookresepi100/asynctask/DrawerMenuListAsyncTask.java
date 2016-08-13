@@ -1,8 +1,11 @@
 package com.seladanghijau.onebookresepi100.asynctask;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.LruCache;
 
 import com.seladanghijau.onebookresepi100.R;
 import com.seladanghijau.onebookresepi100.provider.ILoader;
@@ -15,6 +18,7 @@ public class DrawerMenuListAsyncTask extends AsyncTask<Void, Void, Void> {
     private ILoader loader;
     private TypedArray ikonDrawerMenuList;
     private String[] drawerMenuList;
+    private ProgressDialog progressDialog;
 
     public DrawerMenuListAsyncTask(Context context, ILoader loader) {
         this.context = context;
@@ -28,7 +32,6 @@ public class DrawerMenuListAsyncTask extends AsyncTask<Void, Void, Void> {
     }
 
     protected Void doInBackground(Void... params) {
-        // get resources
         drawerMenuList = context.getResources().getStringArray(R.array.drawerMenu);
         ikonDrawerMenuList = context.getResources().obtainTypedArray(R.array.ikonDrawerMenu);
 

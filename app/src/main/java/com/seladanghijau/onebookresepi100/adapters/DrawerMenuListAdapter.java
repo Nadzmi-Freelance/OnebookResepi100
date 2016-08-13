@@ -2,9 +2,11 @@ package com.seladanghijau.onebookresepi100.adapters;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,21 +39,27 @@ public class DrawerMenuListAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         Holder viewHolder;
+        View rowView;
 
-        viewHolder = new Holder();
-        viewHolder.rowView = layoutInflater.inflate(R.layout.layout_drawer_menu, null);
+        rowView = convertView;
+        if(convertView == null) {
+            rowView = layoutInflater.inflate(R.layout.layout_drawer_menu, null);
 
-        viewHolder.tempImageView = (ImageView) viewHolder.rowView.findViewById(R.id.ivMenuIcon);
-        viewHolder.tempTextView = (TextView) viewHolder.rowView.findViewById(R.id.tvMenuTitle);
+            viewHolder = new Holder();
+            viewHolder.tempImageView = (ImageView) rowView.findViewById(R.id.ivMenuIcon);
+            viewHolder.tempTextView = (TextView) rowView.findViewById(R.id.tvMenuTitle);
+
+            rowView.setTag(viewHolder);
+        } else
+            viewHolder = (Holder) rowView.getTag();
 
         viewHolder.tempImageView.setBackground(menuIconList.getDrawable(position));
         viewHolder.tempTextView.setText(menuList[position]);
 
-        return viewHolder.rowView;
+        return rowView;
     }
 
     static class Holder {
-        View rowView;
         TextView tempTextView;
         ImageView tempImageView;
     }

@@ -25,6 +25,8 @@ import com.seladanghijau.onebookresepi100.dto.Resepi;
 import com.seladanghijau.onebookresepi100.manager.ResepiManager;
 import com.seladanghijau.onebookresepi100.provider.ILoader;
 
+import java.lang.ref.WeakReference;
+
 public class Favorite extends AppCompatActivity implements ILoader, View.OnClickListener, AdapterView.OnItemClickListener {
     // views
     View actionbarView;
@@ -36,6 +38,7 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
     // variables
     ResepiManager resepiManager;
     String[] drawerMenuList, resepiNameList;
+    WeakReference<ListView> lvMenuWeakRef, lvFavoriteWeakRef;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,19 +59,21 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
         // setup views
         ibMenu = (ImageButton) actionbarView.findViewById(R.id.ibMenu);
         ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch);
+        ibSearch.setVisibility(View.GONE);
         tvTitle = (TextView) actionbarView.findViewById(R.id.tvTitle);
         lvMenu = (ListView) findViewById(R.id.lvMenu);
         lvFavorite = (ListView) findViewById(R.id.lvFavorite);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
 
+        tvTitle.setText("Favorite");
+
         // setup listener
         ibMenu.setOnClickListener(this);
-        ibSearch.setOnClickListener(this);
         lvMenu.setOnItemClickListener(this);
         lvFavorite.setOnItemClickListener(this);
 
-        lvFavorite.invalidate();
-        lvMenu.invalidate();
+        lvMenuWeakRef = new WeakReference<>(lvMenu);
+        lvFavoriteWeakRef = new WeakReference<>(lvFavorite);
     }
 
     private void initVars() {
@@ -76,6 +81,9 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
 
         new DrawerMenuListAsyncTask(this, this).execute();
         new FavoriteListAsyncTask(this, this, resepiManager).execute();
+
+        lvFavorite.invalidate();
+        lvMenu.invalidate();
     }
     // ---------------------------------------------------------------------------------------------
 
@@ -95,23 +103,21 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.lvMenu:
-                finish();
-
                 if(position == 0)
                     startActivity(new Intent(this, MainActivity.class));
                 else if(position == 1)
                     startActivity(new Intent(this, TipMasakan.class));
                 else if(position == 2)
                     startActivity(new Intent(this, Favorite.class));
-                else if((position >= 3) || (position <= 22))
+                else if((position >= 3) && (position <= 22))
                     startActivity(new Intent(this, ResepiList.class).putExtra("kategori_resepi", drawerMenuList[position]));
-                else if(position == 23)
+                else if(position == 23 )
                     startActivity(new Intent(this, Cabutan.class));
                 else if(position == 24)
                     startActivity(new Intent(this, TentangKami.class));
                 break;
             case R.id.lvFavorite:
-                startActivity(new Intent(this, ResepiList.class).putExtra("kategori_resepi", drawerMenuList[position]));
+                startActivity(new Intent(this, ResepiInfo.class).putExtra("nama_resepi", resepiNameList[position])); // FIXME - masalah nak p ke resepi info
                 break;
         }
     }
@@ -119,18 +125,25 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
 
     // loader interface methods --------------------------------------------------------------------
     public void onLoadMenuDrawer(String[] drawerMenuList, TypedArray ikonDrawerMenuList) {
-        lvMenu.setAdapter(new DrawerMenuListAdapter(this, drawerMenuList, ikonDrawerMenuList));
+        ListView listViewMenu;
+
+        listViewMenu = lvMenuWeakRef.get();
+        listViewMenu.setAdapter(new DrawerMenuListAdapter(this, drawerMenuList, ikonDrawerMenuList));
 
         this.drawerMenuList = drawerMenuList;
     }
 
     public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {
-        lvFavorite.setAdapter(new ResepiListAdapter(this, resepiNameList, bgResepiList));
+        ListView listViewFavorite;
+
+        listViewFavorite = lvFavoriteWeakRef.get();
+        listViewFavorite.setAdapter(new ResepiListAdapter(this, resepiNameList, bgResepiList));
 
         this.resepiNameList = resepiNameList;
     }
 
     public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {}
+    public void onLoad(int[] resepiCount, String[] kategoriResepiList, Bitmap[] imejKategoriResepiList) {}
     public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(Resepi resepiInfo) {}
     // ---------------------------------------------------------------------------------------------

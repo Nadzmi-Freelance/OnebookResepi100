@@ -1,5 +1,6 @@
 package com.seladanghijau.onebookresepi100.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -24,6 +25,8 @@ import com.seladanghijau.onebookresepi100.asynctask.DrawerMenuListAsyncTask;
 import com.seladanghijau.onebookresepi100.dto.Resepi;
 import com.seladanghijau.onebookresepi100.provider.ILoader;
 
+import java.lang.ref.WeakReference;
+
 public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickListener, AdapterView.OnItemClickListener {
     // views
     ListView lvMenu;
@@ -36,6 +39,7 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
     // variables
     String webAddress, app200Address;
     String[] drawerMenuList;
+    WeakReference<ListView> lvMenuWeakRef;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,20 +60,22 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
         // setup views
         ibMenu = (ImageButton) actionbarView.findViewById(R.id.ibMenu);
         ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch);
+        ibSearch.setVisibility(View.GONE);
         tvTitle = (TextView) actionbarView.findViewById(R.id.tvTitle);
         lvMenu = (ListView) findViewById(R.id.lvMenu);
         tvWebAdddress = (TextView) findViewById(R.id.tvWebAdddress);
         btnMuatTurun = (Button) findViewById(R.id.btnMuatTurun);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
 
+        tvTitle.setText("Cabutan");
+
         // setup listener
         ibMenu.setOnClickListener(this);
-        ibSearch.setOnClickListener(this);
         lvMenu.setOnItemClickListener(this);
         tvWebAdddress.setOnClickListener(this);
         btnMuatTurun.setOnClickListener(this);
 
-        lvMenu.invalidate();
+        lvMenuWeakRef = new WeakReference<>(lvMenu);
     }
 
     private void initVars() {
@@ -77,6 +83,8 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
         app200Address = "https://play.google.com/store?hl=en"; // testing purpose
 
         new DrawerMenuListAsyncTask(this, this).execute();
+
+        lvMenu.invalidate();
     }
     // ---------------------------------------------------------------------------------------------
 
@@ -89,8 +97,6 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
         switch (v.getId()) {
             case R.id.ibMenu:
                 slideDrawer(drawer);
-                break;
-            case R.id.ibSearch:
                 break;
             case R.id.tvWebAdddress:
                 Uri webUri = Uri.parse(webAddress).buildUpon().build();
@@ -106,17 +112,15 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.lvMenu:
-                finish();
-
                 if(position == 0)
                     startActivity(new Intent(this, MainActivity.class));
                 else if(position == 1)
                     startActivity(new Intent(this, TipMasakan.class));
                 else if(position == 2)
                     startActivity(new Intent(this, Favorite.class));
-                else if((position >= 3) || (position <= 22))
+                else if((position >= 3) && (position <= 22))
                     startActivity(new Intent(this, ResepiList.class).putExtra("kategori_resepi", drawerMenuList[position]));
-                else if(position == 23)
+                else if(position == 23 )
                     startActivity(new Intent(this, Cabutan.class));
                 else if(position == 24)
                     startActivity(new Intent(this, TentangKami.class));
@@ -127,12 +131,16 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
 
     // loader interface methods --------------------------------------------------------------------
     public void onLoadMenuDrawer(String[] drawerMenuList, TypedArray ikonDrawerMenuList) {
-        lvMenu.setAdapter(new DrawerMenuListAdapter(this, drawerMenuList, ikonDrawerMenuList));
+        ListView listViewMenu;
+
+        listViewMenu = lvMenuWeakRef.get();
+        listViewMenu.setAdapter(new DrawerMenuListAdapter(this, drawerMenuList, ikonDrawerMenuList));
 
         this.drawerMenuList = drawerMenuList;
     }
 
     public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {}
+    public void onLoad(int[] resepiCount, String[] kategoriResepiList, Bitmap[] imejKategoriResepiList) {}
     public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(Resepi resepiInfo) {}
     public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {}

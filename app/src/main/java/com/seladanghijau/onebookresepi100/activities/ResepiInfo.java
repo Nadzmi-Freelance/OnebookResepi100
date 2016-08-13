@@ -69,6 +69,7 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         // setup views
         ibMenu = (ImageButton) actionbarView.findViewById(R.id.ibMenu);
         ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch);
+        ibSearch.setVisibility(View.GONE);
         tvTitle = (TextView) actionbarView.findViewById(R.id.tvTitle);
         ivResepiImg = (ImageView) findViewById(R.id.ivResepiImg);
         tvResepiName = (TextView) findViewById(R.id.tvResepiName);
@@ -84,19 +85,18 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
 
         // setup listener
         ibMenu.setOnClickListener(this);
-        ibSearch.setOnClickListener(this);
         llFavourite.setOnClickListener(this);
         llShare.setOnClickListener(this);
         lvMenu.setOnItemClickListener(this);
-
-        lvLangkah.invalidate();
-        lvBahan.invalidate();
-        lvMenu.invalidate();
     }
 
     private void initVars() {
         resepiManager = new ResepiManager(this);
         namaResepi = getIntent().getStringExtra("nama_resepi");
+
+        tvTitle.setText(namaResepi);
+        tvTitle.setTextSize(20);
+        tvTitle.invalidate();
 
         setupTabhost(); // setup tabhost
         new DrawerMenuListAsyncTask(this, this).execute();
@@ -127,17 +127,15 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.lvMenu:
-                finish();
-
                 if(position == 0)
                     startActivity(new Intent(this, MainActivity.class));
                 else if(position == 1)
                     startActivity(new Intent(this, TipMasakan.class));
                 else if(position == 2)
                     startActivity(new Intent(this, Favorite.class));
-                else if((position >= 3) || (position <= 22))
+                else if((position >= 3) && (position <= 22))
                     startActivity(new Intent(this, ResepiList.class).putExtra("kategori_resepi", drawerMenuList[position]));
-                else if(position == 23)
+                else if(position == 23 )
                     startActivity(new Intent(this, Cabutan.class));
                 else if(position == 24)
                     startActivity(new Intent(this, TentangKami.class));
@@ -150,6 +148,8 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
     public void onLoadMenuDrawer(String[] drawerMenuList, TypedArray ikonDrawerMenuList) {
         lvMenu.setAdapter(new DrawerMenuListAdapter(this, drawerMenuList, ikonDrawerMenuList));
 
+        lvMenu.invalidate();
+
         this.drawerMenuList = drawerMenuList;
     }
 
@@ -161,10 +161,14 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         tvRingkasan.setText(resepiInfo.getRingkasan());
         lvLangkah.setAdapter(new ResepiLangkahAdapter(this, resepiInfo.getLangkah()));
         // lvBahan.setAdapter(); FIXME: tunjuk list of bahan dalam tab bahan
+
+        lvLangkah.invalidate();
+        lvBahan.invalidate();
     }
 
     public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {}
+    public void onLoad(int[] resepiCount, String[] kategoriResepiList, Bitmap[] imejKategoriResepiList) {}
     public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
     // ---------------------------------------------------------------------------------------------
 

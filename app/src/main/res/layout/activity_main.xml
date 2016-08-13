@@ -7,10 +7,40 @@
     tools:context=".activities.MainActivity">
 
     <!-- The main content view -->
-    <ListView
-        android:id="@+id/lvKategoriResepi"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rlSearchPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <EditText
+                android:id="@+id/etSearch"
+                android:hint="Search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/ibSearchButton"/>
+
+            <ImageButton
+                android:id="@+id/ibSearchButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:scaleType="centerCrop"
+                android:background="#00000000"
+                android:src="@drawable/ic_search_black_24dp" />
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/lvKategoriResepi"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
     <!-- The navigation drawer -->
     <LinearLayout

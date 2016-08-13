@@ -3,7 +3,9 @@ package com.seladanghijau.onebookresepi100.asynctask;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.LruCache;
 
 import com.seladanghijau.onebookresepi100.R;
 import com.seladanghijau.onebookresepi100.manager.ResepiManager;
@@ -36,6 +38,15 @@ public class SetupMainActivityListAsyncTask extends AsyncTask<Void, Void, Void> 
         progressDialog.show();
     }
 
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+
+        loader.onLoad(resepiCount, kategoriResepiList, imejKategoriResepiList); // load kategori list
+
+        if(progressDialog.isShowing())
+            progressDialog.dismiss();
+    }
+
     protected Void doInBackground(Void... params) {
         // get resources
         kategoriResepiList = context.getResources().getStringArray(R.array.kategoriResepi);
@@ -44,21 +55,9 @@ public class SetupMainActivityListAsyncTask extends AsyncTask<Void, Void, Void> 
         // calc resepi count for every category
         resepiCount = new int[kategoriResepiList.length];
         for(int x=0 ; x<kategoriResepiList.length ; x++) {
-            int count;
-
-            count = resepiManager.getResepiCount(resepiManager.getResepiCategoryId(kategoriResepiList[x]));
-            resepiCount[x] = count;
+            resepiCount[x] = resepiManager.getResepiCount(resepiManager.getResepiCategoryId(kategoriResepiList[x]));
         }
 
         return null;
-    }
-
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-
-        loader.onLoad(resepiCount, kategoriResepiList, imejKategoriResepiList); // load kategori list
-
-        if(progressDialog.isShowing())
-            progressDialog.dismiss();
     }
 }

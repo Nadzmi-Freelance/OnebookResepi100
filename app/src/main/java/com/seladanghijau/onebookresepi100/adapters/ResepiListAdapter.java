@@ -36,22 +36,28 @@ public class ResepiListAdapter extends BaseAdapter {
     public long getItemId(int position) { return position; }
 
     public View getView(int position, View convertView, ViewGroup parent) {
+        View rowView;
         Holder viewHolder;
 
-        viewHolder = new Holder();
-        viewHolder.rowView = layoutInflater.inflate(R.layout.layout_resepi_list, null);
+        rowView = convertView;
+        if(convertView == null) {
+            rowView = layoutInflater.inflate(R.layout.layout_resepi_list, null);
 
-        viewHolder.ivResepiListBg = (ImageView) viewHolder.rowView.findViewById(R.id.ivResepiListBg);
-        viewHolder.tvNamaResepi = (TextView) viewHolder.rowView.findViewById(R.id.tvNamaResepi);
+            viewHolder = new Holder();
+            viewHolder.ivResepiListBg = (ImageView) rowView.findViewById(R.id.ivResepiListBg);
+            viewHolder.tvNamaResepi = (TextView) rowView.findViewById(R.id.tvNamaResepi);
+
+            rowView.setTag(viewHolder);
+        } else
+            viewHolder = (Holder) rowView.getTag();
 
         viewHolder.ivResepiListBg.setImageBitmap(resepiBg[position]);
         viewHolder.tvNamaResepi.setText(resepiNameList[position]);
 
-        return viewHolder.rowView;
+        return rowView;
     }
 
     static class Holder {
-        View rowView;
         ImageView ivResepiListBg;
         TextView tvNamaResepi;
     }

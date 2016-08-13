@@ -6,11 +6,13 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Pair;
+import android.widget.ListView;
 
 import com.seladanghijau.onebookresepi100.R;
 import com.seladanghijau.onebookresepi100.manager.ResepiManager;
 import com.seladanghijau.onebookresepi100.provider.ILoader;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**

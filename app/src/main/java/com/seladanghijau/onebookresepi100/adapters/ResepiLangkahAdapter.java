@@ -29,22 +29,28 @@ public class ResepiLangkahAdapter extends BaseAdapter {
     public long getItemId(int position) { return position; }
 
     public View getView(int position, View convertView, ViewGroup parent) {
+        View rowView;
         Holder viewHolder;
 
-        viewHolder = new Holder();
-        viewHolder.rowView = layoutInflater.inflate(R.layout.layout_resepi_langkah, null);
+        rowView = convertView;
+        if(convertView == null) {
+            rowView = layoutInflater.inflate(R.layout.layout_resepi_langkah, null);
 
-        viewHolder.tvStep = (TextView) viewHolder.rowView.findViewById(R.id.tvStep);
-        viewHolder.tvDesc = (TextView) viewHolder.rowView.findViewById(R.id.tvDesc);
+            viewHolder = new Holder();
+            viewHolder.tvStep = (TextView) rowView.findViewById(R.id.tvStep);
+            viewHolder.tvDesc = (TextView) rowView.findViewById(R.id.tvDesc);
+
+            rowView.setTag(viewHolder);
+        } else
+            viewHolder = (Holder) rowView.getTag();
 
         viewHolder.tvStep.setText("Step " + (position+1) + " :");
         viewHolder.tvDesc.setText(step[position]);
 
-        return viewHolder.rowView;
+        return rowView;
     }
 
     static class Holder {
-        View rowView;
         TextView tvStep, tvDesc;
     }
 }

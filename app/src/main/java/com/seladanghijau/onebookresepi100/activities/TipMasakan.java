@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.seladanghijau.onebookresepi100.R;
 import com.seladanghijau.onebookresepi100.adapters.DrawerMenuListAdapter;
@@ -20,15 +21,19 @@ import com.seladanghijau.onebookresepi100.asynctask.DrawerMenuListAsyncTask;
 import com.seladanghijau.onebookresepi100.dto.Resepi;
 import com.seladanghijau.onebookresepi100.provider.ILoader;
 
+import java.lang.ref.WeakReference;
+
 public class TipMasakan extends AppCompatActivity implements ILoader, View.OnClickListener, AdapterView.OnItemClickListener {
     // views
     View actionbarView;
     ImageButton ibMenu, ibSearch;
     ListView lvMenu;
+    TextView tvTitle;
     DrawerLayout drawer;
 
     // variables
     String[] drawerMenuList;
+    WeakReference<ListView> lvMenuWeakRef;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,19 +54,24 @@ public class TipMasakan extends AppCompatActivity implements ILoader, View.OnCli
         // setup views
         ibMenu = (ImageButton) actionbarView.findViewById(R.id.ibMenu);
         ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch);
+        tvTitle = (TextView) actionbarView.findViewById(R.id.tvTitle);
+        ibSearch.setVisibility(View.GONE);
         lvMenu = (ListView) findViewById(R.id.lvMenu);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
 
+        tvTitle.setText("Tips Masakan");
+
         // setup listener
         ibMenu.setOnClickListener(this);
-        ibSearch.setOnClickListener(this);
         lvMenu.setOnItemClickListener(this);
 
-        lvMenu.invalidate();
+        lvMenuWeakRef = new WeakReference<>(lvMenu);
     }
 
     private void initVars() {
         new DrawerMenuListAsyncTask(this, this).execute();
+
+        lvMenu.invalidate();
     }
     // ---------------------------------------------------------------------------------------------
 
@@ -81,17 +91,15 @@ public class TipMasakan extends AppCompatActivity implements ILoader, View.OnCli
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.lvMenu:
-                finish();
-
                 if(position == 0)
                     startActivity(new Intent(this, MainActivity.class));
                 else if(position == 1)
                     startActivity(new Intent(this, TipMasakan.class));
                 else if(position == 2)
                     startActivity(new Intent(this, Favorite.class));
-                else if((position >= 3) || (position <= 22))
+                else if((position >= 3) && (position <= 22))
                     startActivity(new Intent(this, ResepiList.class).putExtra("kategori_resepi", drawerMenuList[position]));
-                else if(position == 23)
+                else if(position == 23 )
                     startActivity(new Intent(this, Cabutan.class));
                 else if(position == 24)
                     startActivity(new Intent(this, TentangKami.class));
@@ -102,12 +110,16 @@ public class TipMasakan extends AppCompatActivity implements ILoader, View.OnCli
 
     // loader interface methods --------------------------------------------------------------------
     public void onLoadMenuDrawer(String[] drawerMenuList, TypedArray ikonDrawerMenuList) {
-        lvMenu.setAdapter(new DrawerMenuListAdapter(this, drawerMenuList, ikonDrawerMenuList)); // setup listview adapter
+        ListView listViewMenu;
+
+        listViewMenu = lvMenuWeakRef.get();
+        listViewMenu.setAdapter(new DrawerMenuListAdapter(this, drawerMenuList, ikonDrawerMenuList)); // setup listview adapter
 
         this.drawerMenuList = drawerMenuList;
     }
 
     public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {}
+    public void onLoad(int[] resepiCount, String[] kategoriResepiList, Bitmap[] imejKategoriResepiList) {}
     public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(Resepi resepiInfo) {}
     public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {}
