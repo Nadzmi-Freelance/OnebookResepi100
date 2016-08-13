@@ -53,14 +53,21 @@ public class SearchResepiCategoryAsyncTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
         ArrayList<Pair<String, Bitmap>> resepiCategoryList;
 
-        resepiCategoryList = resepiManager.getResepiCategoryListWithImg(resepiManager.getResepiCategoryId(category));
+        if(category.isEmpty())
+            resepiCategoryList = resepiManager.getResepiCategoryListWithImg();
+        else
+            resepiCategoryList = resepiManager.getResepiCategoryListWithImg(resepiManager.getResepiCategoryId(category));
 
         resepiCount = new int[resepiCategoryList.size()];
+        kategoriResepiList = new String[resepiCategoryList.size()];
+        imejKategoriResepilist = new Bitmap[resepiCategoryList.size()];
+
         for (int x=0 ; x<resepiCategoryList.size() ; x++) {
             kategoriResepiList[x] = resepiCategoryList.get(x).first;
             imejKategoriResepilist[x] = resepiCategoryList.get(x).second;
             resepiCount[x] = resepiManager.getResepiCount(resepiManager.getResepiCategoryId(kategoriResepiList[x]));
         }
+
         return null;
     }
 }

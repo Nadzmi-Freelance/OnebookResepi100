@@ -2,8 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rlKategoriBg"
     android:layout_width="match_parent"
-    android:layout_height="210dp"
-    android:background="#fff000">
+    android:layout_height="210dp">
+
+    <ImageView
+        android:id="@+id/ivKategoriBg"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:scaleType="centerCrop"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

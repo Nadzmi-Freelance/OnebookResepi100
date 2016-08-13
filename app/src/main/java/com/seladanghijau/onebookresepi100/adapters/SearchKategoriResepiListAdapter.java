@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,6 +28,8 @@ public class SearchKategoriResepiListAdapter extends BaseAdapter {
         this. kategoriResepiList = kategoriResepiList;
         this.imejKategoriResepiList = imejKategoriResepiList;
         this.resepiCount = resepiCount;
+
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public int getCount() { return kategoriResepiList.length; }
@@ -44,7 +47,7 @@ public class SearchKategoriResepiListAdapter extends BaseAdapter {
             viewHolder = new Holder();
             viewHolder.tvKategoriResepiName = (TextView) rowView.findViewById(R.id.tvKategoriResepiName);
             viewHolder.tvBilResepi = (TextView) rowView.findViewById(R.id.tvBilResepi);
-            viewHolder.rlKategoriBg = (RelativeLayout) rowView.findViewById(R.id.rlKategoriBg);
+            viewHolder.ivKategoriBg = (ImageView) rowView.findViewById(R.id.ivKategoriBg);
 
             rowView.setTag(viewHolder);
         } else
@@ -52,13 +55,13 @@ public class SearchKategoriResepiListAdapter extends BaseAdapter {
 
         viewHolder.tvKategoriResepiName.setText(kategoriResepiList[position]);
         viewHolder.tvBilResepi.setText(String.valueOf(resepiCount[position]));
-        viewHolder.rlKategoriBg.setBackground(new BitmapDrawable(imejKategoriResepiList[position]));
+        viewHolder.ivKategoriBg.setImageBitmap(imejKategoriResepiList[position]);
 
         return rowView;
     }
 
     static class Holder {
         TextView tvKategoriResepiName, tvBilResepi;
-        RelativeLayout rlKategoriBg;
+        ImageView ivKategoriBg;
     }
 }

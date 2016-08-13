@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -46,7 +47,7 @@ public class KategoriResepiListAdapter extends BaseAdapter {
             viewHolder = new Holder();
             viewHolder.tvKategoriResepiName = (TextView) rowView.findViewById(R.id.tvKategoriResepiName);
             viewHolder.tvBilResepi = (TextView) rowView.findViewById(R.id.tvBilResepi);
-            viewHolder.rlKategoriBg = (RelativeLayout) rowView.findViewById(R.id.rlKategoriBg);
+            viewHolder.ivKategoriBg = (ImageView) rowView.findViewById(R.id.ivKategoriBg);
 
             rowView.setTag(viewHolder);
         } else
@@ -54,13 +55,13 @@ public class KategoriResepiListAdapter extends BaseAdapter {
 
         viewHolder.tvKategoriResepiName.setText(kategoriResepiList[position]);
         viewHolder.tvBilResepi.setText(String.valueOf(resepiCount[position]));
-        viewHolder.rlKategoriBg.setBackground(imejKategoriResepiList.getDrawable(position));
+        viewHolder.ivKategoriBg.setBackground(imejKategoriResepiList.getDrawable(position));
 
         return rowView;
     }
 
     static class Holder {
         TextView tvKategoriResepiName, tvBilResepi;
-        RelativeLayout rlKategoriBg;
+        ImageView ivKategoriBg;
     }
 }

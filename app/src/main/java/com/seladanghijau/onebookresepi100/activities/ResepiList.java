@@ -23,6 +23,7 @@ import com.seladanghijau.onebookresepi100.R;
 import com.seladanghijau.onebookresepi100.adapters.DrawerMenuListAdapter;
 import com.seladanghijau.onebookresepi100.adapters.ResepiListAdapter;
 import com.seladanghijau.onebookresepi100.asynctask.DrawerMenuListAsyncTask;
+import com.seladanghijau.onebookresepi100.asynctask.SearchResepiNameAsyncTask;
 import com.seladanghijau.onebookresepi100.asynctask.SetupResepiListAsyncTask;
 import com.seladanghijau.onebookresepi100.dto.Resepi;
 import com.seladanghijau.onebookresepi100.manager.ResepiManager;
@@ -115,7 +116,9 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
                 toggelSearchPanel(rlSearchPanel);
                 break;
             case R.id.ibSearchButton:
-                Toast.makeText(this, etSearch.getText(), Toast.LENGTH_SHORT).show();
+                String searchResepi = etSearch.getText().toString();
+
+                new SearchResepiNameAsyncTask(this, this, resepiManager, categoryName, searchResepi).execute();
                 break;
         }
     }
@@ -157,6 +160,17 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
         this.drawerMenuList = drawerMenuList;
     }
 
+    public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {
+        ListView listViewResepi;
+
+        listViewResepi = lvResepiWeakRef.get();
+        listViewResepi.setAdapter(new ResepiListAdapter(this, resepiNameList, bgResepiList));
+
+        lvResepiList.invalidate();
+
+        this.resepiNameList = resepiNameList;
+    }
+
     public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {
         ListView listViewResepi;
 
@@ -170,7 +184,6 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
     }
 
     public void onLoad(Resepi resepiInfo) {}
-    public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {}
     public void onLoad(int[] resepiCount, String[] kategoriResepiList, Bitmap[] imejKategoriResepiList) {}
     // ---------------------------------------------------------------------------------------------

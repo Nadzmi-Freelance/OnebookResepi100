@@ -7,6 +7,7 @@ import android.util.Pair;
 import com.seladanghijau.onebookresepi100.dto.Resepi;
 import com.seladanghijau.onebookresepi100.provider.ResepiProvider;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -26,6 +27,10 @@ public class ResepiManager {
     }
 
     // util methods --------------------------------------------------------------------------------
+    public int getResepiCategoryId(String categoryName) {
+        return resepiProvider.getResepiCategoryId(categoryName);
+    }
+
     public ArrayList<Resepi> getResepiList() {
         return resepiProvider.getResepiList();
     }
@@ -50,6 +55,10 @@ public class ResepiManager {
         return resepiProvider.getResepiNameList();
     }
 
+    public ArrayList<Pair<String, Bitmap>> getResepiNameListWithImg(int resepiCategory, int resepiId) {
+        return resepiProvider.getResepiNameListWithImg(resepiCategory, resepiId);
+    }
+
     public ArrayList<Pair<String, Bitmap>> getResepiNameListWithImg(int resepiCategory) {
         return resepiProvider.getResepiNameListWithImg(resepiCategory);
     }
@@ -58,8 +67,8 @@ public class ResepiManager {
         return resepiProvider.getResepiNameListWithImg();
     }
 
-    public int getResepiCategoryId(String categoryName) {
-        return resepiProvider.getResepiCategoryId(categoryName);
+    public ArrayList<Pair<String, Bitmap>> getResepiCategoryListWithImg() {
+        return resepiProvider.getResepiCategoryListWithImg();
     }
 
     public ArrayList<Pair<String, Bitmap>> getResepiCategoryListWithImg(int categoryId) {

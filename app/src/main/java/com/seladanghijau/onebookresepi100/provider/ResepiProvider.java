@@ -104,6 +104,26 @@ public class ResepiProvider extends SQLiteOpenHelper {
     // ---------------------------------------------------------------------------------------------
 
     // provider methods ----------------------------------------------------------------------------
+    public int getResepiCategoryId(String categoryName) {
+        SQLiteDatabase sqliteDB;
+        Cursor cursor;
+        String sql;
+        int categoryId;
+
+        sqliteDB = SQLiteDatabase.openDatabase(DB_PATH, null, SQLiteDatabase.OPEN_READWRITE); // read sqlite db
+
+        sql = "SELECT categoryId FROM lookupresepicategory WHERE categoryDesc LIKE '" + categoryName + "' LIMIT 1"; // sql query
+        cursor = sqliteDB.rawQuery(sql, null); // cursor for queried data
+
+        cursor.moveToFirst(); // move cursor to first index
+        categoryId = cursor.getInt(cursor.getColumnIndex("categoryId"));
+
+        cursor.close();
+        sqliteDB.close();
+
+        return categoryId;
+    }
+
     public ArrayList<Resepi> getResepiList() {
         ArrayList<Resepi> resepiList;
         SQLiteDatabase sqliteDB;
@@ -221,36 +241,6 @@ public class ResepiProvider extends SQLiteOpenHelper {
         return resepiNameList;
     }
 
-    public ArrayList<Pair<String, Bitmap>> getResepiNameListWithImg(int resepiCategory) {
-        ArrayList<Pair<String, Bitmap>> resepiNameWithImgList;
-        SQLiteDatabase sqliteDB;
-        Cursor cursor;
-        String sql;
-
-        sqliteDB = SQLiteDatabase.openDatabase(DB_PATH, null, SQLiteDatabase.OPEN_READWRITE); // read sqlite db
-
-        sql = "SELECT resepiName, resepiGambar FROM resepi WHERE resepiCategory LIKE '" + resepiCategory + "'"; // sql query
-        cursor = sqliteDB.rawQuery(sql, null); // cursor for queried data
-
-        cursor.moveToFirst(); // move cursor to first index
-        resepiNameWithImgList = new ArrayList<>();
-        while (!cursor.isAfterLast()) {
-            String resepiName;
-            Bitmap resepiImg;
-
-            resepiName = cursor.getString(cursor.getColumnIndex("resepiName"));
-            resepiImg = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")), 300, 200);
-            resepiNameWithImgList.add(new Pair<>(resepiName, resepiImg));
-
-            cursor.moveToNext();
-        }
-
-        cursor.close();
-        sqliteDB.close();
-
-        return resepiNameWithImgList;
-    }
-
     public void addFavorite(int resepiId) {
         SQLiteDatabase sqliteDB;
         String sql;
@@ -323,24 +313,91 @@ public class ResepiProvider extends SQLiteOpenHelper {
         return resepiNameWithImgList;
     }
 
-    public int getResepiCategoryId(String categoryName) {
+    public ArrayList<Pair<String, Bitmap>> getResepiNameListWithImg(int resepiCategory) {
+        ArrayList<Pair<String, Bitmap>> resepiNameWithImgList;
         SQLiteDatabase sqliteDB;
         Cursor cursor;
         String sql;
-        int categoryId;
 
         sqliteDB = SQLiteDatabase.openDatabase(DB_PATH, null, SQLiteDatabase.OPEN_READWRITE); // read sqlite db
 
-        sql = "SELECT categoryId FROM lookupresepicategory WHERE categoryDesc LIKE '" + categoryName + "' LIMIT 1"; // sql query
+        sql = "SELECT resepiName, resepiGambar FROM resepi WHERE resepiCategory LIKE '" + resepiCategory + "'"; // sql query
         cursor = sqliteDB.rawQuery(sql, null); // cursor for queried data
 
         cursor.moveToFirst(); // move cursor to first index
-        categoryId = cursor.getInt(cursor.getColumnIndex("categoryId"));
+        resepiNameWithImgList = new ArrayList<>();
+        while (!cursor.isAfterLast()) {
+            String resepiName;
+            Bitmap resepiImg;
+
+            resepiName = cursor.getString(cursor.getColumnIndex("resepiName"));
+            resepiImg = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")), 300, 200);
+            resepiNameWithImgList.add(new Pair<>(resepiName, resepiImg));
+
+            cursor.moveToNext();
+        }
 
         cursor.close();
         sqliteDB.close();
 
-        return categoryId;
+        return resepiNameWithImgList;
+    }
+
+    public ArrayList<Pair<String, Bitmap>> getResepiNameListWithImg(int resepiCategory, int resepiId) {
+        ArrayList<Pair<String, Bitmap>> resepiNameWithImgList;
+        SQLiteDatabase sqliteDB;
+        Cursor cursor;
+        String sql;
+
+        sqliteDB = SQLiteDatabase.openDatabase(DB_PATH, null, SQLiteDatabase.OPEN_READWRITE); // read sqlite db
+
+        sql = "SELECT resepiName, resepiGambar FROM resepi WHERE resepiCategory LIKE '" + resepiCategory + "' AND resepiId LIKE '" + resepiId + "'"; // sql query
+        cursor = sqliteDB.rawQuery(sql, null); // cursor for queried data
+
+        cursor.moveToFirst(); // move cursor to first index
+        resepiNameWithImgList = new ArrayList<>();
+        while (!cursor.isAfterLast()) {
+            String resepiName;
+            Bitmap resepiImg;
+
+            resepiName = cursor.getString(cursor.getColumnIndex("resepiName"));
+            resepiImg = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("resepiGambar")), 300, 200);
+            resepiNameWithImgList.add(new Pair<>(resepiName, resepiImg));
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        sqliteDB.close();
+
+        return resepiNameWithImgList;
+    }
+
+    public ArrayList<Pair<String, Bitmap>> getResepiCategoryListWithImg() {
+        ArrayList<Pair<String, Bitmap>> resepiCategory;
+        SQLiteDatabase sqliteDB;
+        Cursor cursor;
+        String sql;
+
+        sqliteDB = SQLiteDatabase.openDatabase(DB_PATH, null, SQLiteDatabase.OPEN_READWRITE); // read sqlite db
+
+        sql = "SELECT categoryDesc, categoryGambar FROM lookupresepicategory"; // sql query
+        cursor = sqliteDB.rawQuery(sql, null); // cursor for queried data
+
+        cursor.moveToFirst(); // move cursor to first index
+        resepiCategory = new ArrayList<>();
+        while (!cursor.isAfterLast()) {
+            String categoryName = cursor.getString(cursor.getColumnIndex("categoryDesc"));
+            Bitmap categoryGambar = byteArrayToBitmap(cursor.getBlob(cursor.getColumnIndex("categoryGambar")), 300, 200);
+
+            resepiCategory.add(new Pair<>(categoryName, categoryGambar));
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        sqliteDB.close();
+
+        return resepiCategory;
     }
 
     public ArrayList<Pair<String, Bitmap>> getResepiCategoryListWithImg(int categoryId) {
@@ -351,7 +408,7 @@ public class ResepiProvider extends SQLiteOpenHelper {
 
         sqliteDB = SQLiteDatabase.openDatabase(DB_PATH, null, SQLiteDatabase.OPEN_READWRITE); // read sqlite db
 
-        sql = "SELECT categoryDesc, categoryGambar FROM lookupresepicategory WHERE categoryId LIKE '" + categoryId + "'"; // sql query
+        sql = "SELECT categoryDesc, categoryGambar FROM lookupresepicategory WHERE categoryId LIKE '" + categoryId + "' LIMIT 1"; // sql query
         cursor = sqliteDB.rawQuery(sql, null); // cursor for queried data
 
         cursor.moveToFirst(); // move cursor to first index

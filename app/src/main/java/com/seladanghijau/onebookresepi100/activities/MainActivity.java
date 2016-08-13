@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.seladanghijau.onebookresepi100.R;
 import com.seladanghijau.onebookresepi100.adapters.DrawerMenuListAdapter;
+import com.seladanghijau.onebookresepi100.adapters.KategoriResepiListAdapter;
 import com.seladanghijau.onebookresepi100.adapters.SearchKategoriResepiListAdapter;
 import com.seladanghijau.onebookresepi100.asynctask.DrawerMenuListAsyncTask;
 import com.seladanghijau.onebookresepi100.asynctask.SearchResepiCategoryAsyncTask;
@@ -150,6 +151,18 @@ public class MainActivity extends AppCompatActivity implements ILoader, View.OnC
         this.drawerMenuList = drawerMenuList;
     }
 
+    public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {
+        ListView listViewKategoriResepi;
+
+        listViewKategoriResepi = lvKategoriResepiWeakRef.get();
+        listViewKategoriResepi.setAdapter(new KategoriResepiListAdapter(this, kategoriResepiList, imejKategoriResepiList, resepiCount));
+
+        lvKategoriResepi.invalidate();
+
+        this.resepiCount = resepiCount;
+        this.kategoriResepiList = kategoriResepiList;
+    }
+
     public void onLoad(int[] resepiCount, String[] kategoriResepiList, Bitmap[] imejKategoriResepiList) {
         ListView listViewKategoriResepi;
 
@@ -162,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements ILoader, View.OnC
         this.kategoriResepiList = kategoriResepiList;
     }
 
-    public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {}
     public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(Resepi resepiInfo) {}
     public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {}
