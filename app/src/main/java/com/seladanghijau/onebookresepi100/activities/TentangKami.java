@@ -145,6 +145,7 @@ public class TentangKami extends AppCompatActivity implements ILoader, View.OnCl
     public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(Resepi resepiInfo) {}
     public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {}
+    public void onLoad(String[] tipsMasakan) {}
     // ---------------------------------------------------------------------------------------------
 
     // util  methods -------------------------------------------------------------------------------

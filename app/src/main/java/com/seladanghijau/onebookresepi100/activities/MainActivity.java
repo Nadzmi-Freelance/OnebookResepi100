@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements ILoader, View.OnC
     public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(Resepi resepiInfo) {}
     public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {}
+    public void onLoad(String[] tipsMasakan) {}
     // ---------------------------------------------------------------------------------------------
 
     // util  methods -------------------------------------------------------------------------------

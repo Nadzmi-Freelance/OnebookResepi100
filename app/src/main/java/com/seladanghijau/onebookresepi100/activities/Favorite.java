@@ -146,6 +146,7 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
     public void onLoad(int[] resepiCount, String[] kategoriResepiList, Bitmap[] imejKategoriResepiList) {}
     public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(Resepi resepiInfo) {}
+    public void onLoad(String[] tipsMaskan) {}
     // ---------------------------------------------------------------------------------------------
 
     // util  methods -------------------------------------------------------------------------------

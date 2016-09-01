@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.seladanghijau.onebookresepi100.R;
 import com.seladanghijau.onebookresepi100.adapters.DrawerMenuListAdapter;
 import com.seladanghijau.onebookresepi100.asynctask.DrawerMenuListAsyncTask;
+import com.seladanghijau.onebookresepi100.asynctask.TipsMasakanAsyncTask;
 import com.seladanghijau.onebookresepi100.dto.Resepi;
 import com.seladanghijau.onebookresepi100.provider.ILoader;
 
@@ -27,13 +29,13 @@ public class TipMasakan extends AppCompatActivity implements ILoader, View.OnCli
     // views
     View actionbarView;
     ImageButton ibMenu, ibSearch;
-    ListView lvMenu;
+    ListView lvMenu, lvTips;
     TextView tvTitle;
     DrawerLayout drawer;
 
     // variables
     String[] drawerMenuList;
-    WeakReference<ListView> lvMenuWeakRef;
+    WeakReference<ListView> lvMenuWeakRef, lvTipsWeakRef;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +59,7 @@ public class TipMasakan extends AppCompatActivity implements ILoader, View.OnCli
         tvTitle = (TextView) actionbarView.findViewById(R.id.tvTitle);
         ibSearch.setVisibility(View.GONE);
         lvMenu = (ListView) findViewById(R.id.lvMenu);
+        lvTips = (ListView) findViewById(R.id.lvTips);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
 
         tvTitle.setText("Tips Masakan");
@@ -66,12 +69,15 @@ public class TipMasakan extends AppCompatActivity implements ILoader, View.OnCli
         lvMenu.setOnItemClickListener(this);
 
         lvMenuWeakRef = new WeakReference<>(lvMenu);
+        lvTipsWeakRef = new WeakReference<>(lvTips);
     }
 
     private void initVars() {
+        new TipsMasakanAsyncTask(this, this).execute();
         new DrawerMenuListAsyncTask(this, this).execute();
 
         lvMenu.invalidate();
+        lvTips.invalidate();
     }
     // ---------------------------------------------------------------------------------------------
 
@@ -116,6 +122,13 @@ public class TipMasakan extends AppCompatActivity implements ILoader, View.OnCli
         listViewMenu.setAdapter(new DrawerMenuListAdapter(this, drawerMenuList, ikonDrawerMenuList)); // setup listview adapter
 
         this.drawerMenuList = drawerMenuList;
+    }
+
+    public void onLoad(String[] tipsMasakan) {
+        ListView listViewTipsMasakan;
+
+        listViewTipsMasakan = lvTipsWeakRef.get();
+        listViewTipsMasakan.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tipsMasakan));
     }
 
     public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {}

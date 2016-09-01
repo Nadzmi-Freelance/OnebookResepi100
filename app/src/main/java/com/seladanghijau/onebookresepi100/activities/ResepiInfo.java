@@ -178,6 +178,7 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
     public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {}
     public void onLoad(int[] resepiCount, String[] kategoriResepiList, Bitmap[] imejKategoriResepiList) {}
     public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
+    public void onLoad(String[] tipsMasakan) {}
     // ---------------------------------------------------------------------------------------------
 
     // util methods --------------------------------------------------------------------------------

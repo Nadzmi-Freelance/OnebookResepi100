@@ -144,6 +144,7 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
     public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(Resepi resepiInfo) {}
     public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {}
+    public void onLoad(String[] tipsMasakan) {}
     // ---------------------------------------------------------------------------------------------
 
     // util  methods -------------------------------------------------------------------------------

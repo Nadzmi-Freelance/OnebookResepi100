@@ -103,4 +103,13 @@
         <item>@drawable/sayuran</item>
         <item>@drawable/antarabangsa</item>
     </array>
+
+    <array name="tipsMasakan">
+        <item>Tip 1</item>
+        <item>Tip 2</item>
+        <item>Tip 3</item>
+        <item>Tip 4</item>
+        <item>Tip 5</item>
+        <item>Tip 6</item>
+    </array>
 </resources>
