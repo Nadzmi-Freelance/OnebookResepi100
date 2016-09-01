@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -79,7 +80,7 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
     }
 
     private void initVars() {
-        webAddress = "https://www.onebook.com.my";
+        webAddress = "https://www.onebook.com.my/v1/cabutan.html";
         app200Address = "https://play.google.com/store?hl=en"; // testing purpose
 
         new DrawerMenuListAsyncTask(this, this).execute();
@@ -100,10 +101,14 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
                 break;
             case R.id.tvWebAdddress:
                 Uri webUri = Uri.parse(webAddress).buildUpon().build();
+
+                buttonEffect(tvWebAdddress);
                 startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, webUri), "Choose web browser"));
                 break;
             case R.id.btnMuatTurun:
                 Uri app200Uri = Uri.parse(app200Address).buildUpon().build();
+
+                buttonEffect(btnMuatTurun);
                 startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, app200Uri), "Choose web browser"));
                 break;
         }
@@ -153,6 +158,12 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
             drawer.closeDrawer(Gravity.LEFT);
         else if(!drawer.isDrawerOpen(Gravity.LEFT))
             drawer.openDrawer(Gravity.LEFT);
+    }
+
+    private void buttonEffect(View view) {
+        AlphaAnimation buttonClick = new AlphaAnimation(1f, 0.5f);
+
+        view.startAnimation(buttonClick);
     }
     // ---------------------------------------------------------------------------------------------
 }

@@ -15,10 +15,9 @@ public class Resepi {
     private Bitmap resepiImg;
     private String[] langkah;
     private ArrayList<Pair<String, String>> bahan;
-    private Bitmap[] bahanImg;
 
     // constructors
-    public Resepi(int id, String name, String ringkasan, int category, Bitmap resepiImg, String[] langkah, ArrayList<Pair<String, String>> bahan, Bitmap[] bahanImg) {
+    public Resepi(int id, String name, String ringkasan, int category, Bitmap resepiImg, String[] langkah, ArrayList<Pair<String, String>> bahan) {
         this.id = id; // resepi id
         this.name = name; // resepi category
         this.ringkasan = ringkasan; // resepi name
@@ -26,7 +25,6 @@ public class Resepi {
         this.resepiImg = resepiImg; // resepi img
         this.langkah = langkah; // resepi langkah
         this.bahan = bahan; // resepi bahan pair -> bahanDesc:bahanName
-        this.bahanImg = bahanImg; // resepi bahan img
     }
 
     public Resepi(int id, String name, Bitmap resepiImg) {
@@ -50,7 +48,6 @@ public class Resepi {
     public Bitmap getResepiImg() { return resepiImg; }
     public String[] getLangkah() { return langkah; }
     public ArrayList<Pair<String, String>> getBahan() { return bahan; }
-    public Bitmap[] getBahanImg() { return bahanImg; }
 
     public void setId(int id) { this.id = id; }
     public void setCategory(int category) { this.category = category; }
@@ -59,5 +56,4 @@ public class Resepi {
     public void setResepiImg(Bitmap resepiImg) { this.resepiImg = resepiImg; }
     public void setLangkah(String[] langkah) { this.langkah = langkah; }
     public void setBahan(ArrayList<Pair<String, String>> bahan) { this.bahan = bahan; }
-    public void setBahanImg(Bitmap[] bahanImg) { this.bahanImg = bahanImg; }
 }

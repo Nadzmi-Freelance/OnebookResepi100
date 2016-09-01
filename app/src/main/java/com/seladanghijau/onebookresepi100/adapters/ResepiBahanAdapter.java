@@ -22,13 +22,11 @@ public class ResepiBahanAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater layoutInflater;
     private ArrayList<Pair<String, String>> bahan;
-    private Bitmap[] bahanImg;
     private String currDesc, prevDesc;
 
-    public ResepiBahanAdapter(Context context, ArrayList<Pair<String, String>> bahan, Bitmap[] bahanImg) {
+    public ResepiBahanAdapter(Context context, ArrayList<Pair<String, String>> bahan) {
         this.context = context;
         this.bahan = bahan;
-        this.bahanImg = bahanImg;
         currDesc = "";
         prevDesc = "";
 
@@ -50,7 +48,6 @@ public class ResepiBahanAdapter extends BaseAdapter {
             viewHolder = new Holder();
             viewHolder.tvBahanDesc = (TextView) rowView.findViewById(R.id.tvBahanDesc);
             viewHolder.tvBahanName = (TextView) rowView.findViewById(R.id.tvBahanName);
-            viewHolder.ivBahanImg = (ImageView) rowView.findViewById(R.id.ivBahanImg);
 
             rowView.setTag(viewHolder);
         } else
@@ -70,13 +67,11 @@ public class ResepiBahanAdapter extends BaseAdapter {
 
         viewHolder.tvBahanDesc.setText("Bahan " + bahan.get(position).first);
         viewHolder.tvBahanName.setText(bahan.get(position).second);
-        viewHolder.ivBahanImg.setImageBitmap(bahanImg[position]);
 
         return rowView;
     }
 
     class Holder {
         TextView tvBahanDesc, tvBahanName;
-        ImageView ivBahanImg;
     }
 }

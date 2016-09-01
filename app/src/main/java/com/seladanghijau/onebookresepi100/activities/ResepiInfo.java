@@ -48,10 +48,9 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
     ListView lvMenu, lvBahan, lvLangkah;
     ImageView ivResepiImg;
     TabHost thResepiInfo;
-    RelativeLayout rlBottomPanel;
     DrawerLayout drawer;
     TextView tvResepiName, tvRingkasan, tvTitle;
-    LinearLayout llFavourite, llShare;
+    ImageButton ibShare, ibFavorite;
 
     // variables
     int resepiId;
@@ -88,15 +87,14 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         lvBahan = (ListView) findViewById(R.id.lvBahan);
         lvLangkah = (ListView) findViewById(R.id.lvLangkah);
         thResepiInfo = (TabHost) findViewById(R.id.thResepiInfo);
-        rlBottomPanel = (RelativeLayout) findViewById(R.id.rlBottomPanel);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
-        llFavourite = (LinearLayout) findViewById(R.id.llFavourite);
-        llShare = (LinearLayout) findViewById(R.id.llShare);
+        ibShare = (ImageButton) findViewById(R.id.ibShare);
+        ibFavorite = (ImageButton) findViewById(R.id.ibFavorite);
 
         // setup listener
         ibMenu.setOnClickListener(this);
-        llFavourite.setOnClickListener(this);
-        llShare.setOnClickListener(this);
+        ibShare.setOnClickListener(this);
+        ibFavorite.setOnClickListener(this);
         lvMenu.setOnItemClickListener(this);
     }
 
@@ -111,7 +109,6 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         setupTabhost(); // setup tabhost
         new DrawerMenuListAsyncTask(this, this).execute();
         new ResepiInfoAsyncTask(this, this, resepiManager, namaResepi).execute(); // setup ui
-        setupBottomSheetBehaviour(rlBottomPanel);
     }
     // ---------------------------------------------------------------------------------------------
 
@@ -121,20 +118,20 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
             case R.id.ibMenu:
                 slideDrawer(drawer);
                 break;
-            case R.id.llFavourite:
-                buttonEffect(llFavourite);
+            case R.id.ibFavorite:
+                buttonEffect(ibFavorite);
                 resepiManager.addFavorite(resepiId);
                 Toast.makeText(this, "Added to favorite", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.llShare:
-                buttonEffect(llShare);
+            case R.id.ibShare:
+                buttonEffect(ibShare);
                 shareResepi(namaResepi);
                 break;
         }
     }
 
     public void onBackPressed() {
-        slide(rlBottomPanel);
+        finish();
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -173,7 +170,7 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         tvResepiName.setText(resepiInfo.getName());
         tvRingkasan.setText(resepiInfo.getRingkasan());
         lvLangkah.setAdapter(new ResepiLangkahAdapter(this, resepiInfo.getLangkah()));
-        lvBahan.setAdapter(new ResepiBahanAdapter(this, resepiInfo.getBahan(), resepiInfo.getBahanImg()));
+        lvBahan.setAdapter(new ResepiBahanAdapter(this, resepiInfo.getBahan()));
 
         lvLangkah.invalidate();
         lvBahan.invalidate();
@@ -197,19 +194,6 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
-    private void setupBottomSheetBehaviour(View v) {
-        final BottomSheetBehavior bottomSheetBehavior;
-
-        bottomSheetBehavior = BottomSheetBehavior.from(v);
-        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            public void onSlide(View bottomSheet, float slideOffset) {}
-            public void onStateChanged(View bottomSheet, int newState) {
-                if(newState == BottomSheetBehavior.STATE_DRAGGING)
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            }
-        });
-    }
-
     private void slideDrawer(DrawerLayout drawer) {
         if(drawer.isDrawerOpen(Gravity.LEFT))
             drawer.closeDrawer(Gravity.LEFT);
@@ -217,7 +201,7 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
             drawer.openDrawer(Gravity.LEFT);
     }
 
-    private void shareResepi(String resepiName) { // FIXME - ubah sharing content
+    private void shareResepi(String resepiName) {
         Intent shareIntent;
 
         shareIntent = new Intent();

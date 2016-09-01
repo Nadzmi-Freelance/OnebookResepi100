@@ -477,7 +477,6 @@ public class ResepiProvider extends SQLiteOpenHelper {
         Bitmap resepiGambar;
         String[] resepiLangkah;
         ArrayList<Pair<String, String>> resepiBahan;
-        Bitmap[] resepiBahanImg;
 
         sqliteDB = SQLiteDatabase.openDatabase(DB_PATH, null, SQLiteDatabase.OPEN_READWRITE); // read sqlite db
 
@@ -527,21 +526,12 @@ public class ResepiProvider extends SQLiteOpenHelper {
             cursorBahan.moveToNext();
         }
 
-        cursorBahan.moveToFirst();
-        resepiBahanImg = new Bitmap[cursorBahan.getCount()];
-        for(int x=0 ; x<cursorBahan.getCount() ; x++) {
-            Bitmap bahanImg;
-
-            bahanImg = byteArrayToBitmap(cursorBahan.getBlob(cursorBahan.getColumnIndex("bahanGambar")), 100, 100);
-            resepiBahanImg[x] = bahanImg;
-        }
-
         cursor.close();
         cursorBahan.close();
         cursorLangkah.close();
         sqliteDB.close();
 
-        return new Resepi(resepiId, resepiName, resepiRingkasan, resepiCategory, resepiGambar, resepiLangkah, resepiBahan, resepiBahanImg);
+        return new Resepi(resepiId, resepiName, resepiRingkasan, resepiCategory, resepiGambar, resepiLangkah, resepiBahan);
     }
     // ---------------------------------------------------------------------------------------------
 }

@@ -63,7 +63,7 @@
             </LinearLayout>
 
             <TextView
-                android:text="Version 1.0 /2016"
+                android:text="Version 3.1 /2016"
                 android:id="@+id/tvVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
