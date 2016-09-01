@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -15,7 +16,9 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -119,10 +122,12 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
                 slideDrawer(drawer);
                 break;
             case R.id.llFavourite:
+                buttonEffect(llFavourite);
                 resepiManager.addFavorite(resepiId);
                 Toast.makeText(this, "Added to favorite", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.llShare:
+                buttonEffect(llShare);
                 shareResepi(namaResepi);
                 break;
         }
@@ -222,6 +227,12 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         Intent.createChooser(shareIntent, "Onebook Resepi 100");
 
         startActivity(Intent.createChooser(shareIntent, this.getPackageName()));
+    }
+
+    private void buttonEffect(View view) {
+        AlphaAnimation buttonClick = new AlphaAnimation(1f, 0.5f);
+
+        view.startAnimation(buttonClick);
     }
     // ---------------------------------------------------------------------------------------------
 
