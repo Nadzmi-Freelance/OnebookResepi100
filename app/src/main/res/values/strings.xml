@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Onebook Resepi 100</string>
+    <string name="app_name">Onebook Resepi Free</string>
 
     <string-array name="drawerMenu">
         <item>Home</item>
@@ -32,31 +32,31 @@
         <item>Tentang Kami</item>
     </string-array>
     <array name="ikonDrawerMenu">
-        <item>@drawable/ic_home_black_24dp</item>
-        <item>@drawable/ic_info_outline_black_24dp</item>
-        <item>@drawable/ic_star_black_24dp</item>
-        <item>@drawable/ic_menu_rempah_ratus</item>
-        <item>@drawable/ic_menu_soup</item>
-        <item>@drawable/ic_menu_ayam</item>
-        <item>@drawable/ic_menu_daging</item>
-        <item>@drawable/ic_menu_ikan</item>
-        <item>@drawable/ic_menu_seafood</item>
-        <item>@drawable/ic_menu_telur</item>
-        <item>@drawable/ic_menu_bubur</item>
-        <item>@drawable/ic_menu_kek</item>
-        <item>@drawable/ic_menu_kuih_raya</item>
-        <item>@drawable/ic_menu_kuih_muih</item>
-        <item>@drawable/ic_menu_mi_laksa</item>
-        <item>@drawable/ic_menu_minuman</item>
-        <item>@drawable/ic_menu_nasi</item>
-        <item>@drawable/ic_menu_dessert</item>
-        <item>@drawable/ic_menu_puding</item>
-        <item>@drawable/ic_menu_makanan_ringan</item>
-        <item>@drawable/ic_menu_sos_sambal</item>
-        <item>@drawable/ic_menu_sayur_sayuran</item>
-        <item>@drawable/ic_menu_antarabangsa</item>
-        <item>@drawable/ic_stars_black_24dp</item>
-        <item>@drawable/ic_info_black_24dp</item>
+        <item>@drawable/ic_home_black_100</item>
+        <item>@drawable/ic_info_outline_black_100</item>
+        <item>@drawable/ic_star_black_100</item>
+        <item>@drawable/ic_menu_rempah_ratus_100</item>
+        <item>@drawable/ic_menu_soup_100</item>
+        <item>@drawable/ic_menu_ayam_100</item>
+        <item>@drawable/ic_menu_daging_100</item>
+        <item>@drawable/ic_menu_ikan_100</item>
+        <item>@drawable/ic_menu_seafood_100</item>
+        <item>@drawable/ic_menu_telur_100</item>
+        <item>@drawable/ic_menu_bubur_100</item>
+        <item>@drawable/ic_menu_kek_100</item>
+        <item>@drawable/ic_menu_kuih_raya_100</item>
+        <item>@drawable/ic_menu_kuih_muih_100</item>
+        <item>@drawable/ic_menu_mi_laksa_100</item>
+        <item>@drawable/ic_menu_minuman_100</item>
+        <item>@drawable/ic_menu_nasi_100</item>
+        <item>@drawable/ic_menu_dessert_100</item>
+        <item>@drawable/ic_menu_puding_100</item>
+        <item>@drawable/ic_menu_makanan_ringan_100</item>
+        <item>@drawable/ic_menu_sos_sambal_100</item>
+        <item>@drawable/ic_menu_sayur_sayuran_100</item>
+        <item>@drawable/ic_menu_antarabangsa_100</item>
+        <item>@drawable/ic_stars_black_100</item>
+        <item>@drawable/ic_info_black_100</item>
     </array>
 
     <string-array name="kategoriResepi">
@@ -82,25 +82,25 @@
         <item>Antarabangsa</item>
     </string-array>
     <array name="imejKategoriResepi">
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
-        <item>@drawable/sample</item>
+        <item>@drawable/rempah_ratus</item>
+        <item>@drawable/sup</item>
+        <item>@drawable/ayam</item>
+        <item>@drawable/daging</item>
+        <item>@drawable/ikan</item>
+        <item>@drawable/seafood</item>
+        <item>@drawable/telur</item>
+        <item>@drawable/bubur</item>
+        <item>@drawable/kek</item>
+        <item>@drawable/kuih_raya</item>
+        <item>@drawable/kuih_muih</item>
+        <item>@drawable/mi_laksa</item>
+        <item>@drawable/minuman</item>
+        <item>@drawable/nasi</item>
+        <item>@drawable/dessert</item>
+        <item>@drawable/puding</item>
+        <item>@drawable/makanan_ringan</item>
+        <item>@drawable/sos_sambal</item>
+        <item>@drawable/sayuran</item>
+        <item>@drawable/antarabangsa</item>
     </array>
 </resources>

@@ -19,14 +19,14 @@ public class Resepi {
 
     // constructors
     public Resepi(int id, String name, String ringkasan, int category, Bitmap resepiImg, String[] langkah, ArrayList<Pair<String, String>> bahan, Bitmap[] bahanImg) {
-        this.id = id;
-        this.name = name;
-        this.ringkasan = ringkasan;
-        this.category = category;
-        this.resepiImg = resepiImg;
-        this.langkah = langkah;
-        this.bahan = bahan;
-        this.bahanImg = bahanImg;
+        this.id = id; // resepi id
+        this.name = name; // resepi category
+        this.ringkasan = ringkasan; // resepi name
+        this.category = category; // resepi ringkasan
+        this.resepiImg = resepiImg; // resepi img
+        this.langkah = langkah; // resepi langkah
+        this.bahan = bahan; // resepi bahan pair -> bahanDesc:bahanName
+        this.bahanImg = bahanImg; // resepi bahan img
     }
 
     public Resepi(int id, String name, Bitmap resepiImg) {

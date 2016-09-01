@@ -44,7 +44,7 @@ public class ResepiLangkahAdapter extends BaseAdapter {
         } else
             viewHolder = (Holder) rowView.getTag();
 
-        viewHolder.tvStep.setText("Step " + (position+1) + " :");
+        viewHolder.tvStep.setText("Langkah " + (position+1) + " :");
         viewHolder.tvDesc.setText(step[position]);
 
         return rowView;

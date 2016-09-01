@@ -14,13 +14,12 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by seladanghijau on 7/8/2016.
  */
 public class ResepiProvider extends SQLiteOpenHelper {
-    public static final String DB_NAME = "resepi.db";
+    public static final String DB_NAME = "resepi_100.db";
     public static final int DB_VERSION = 1;
     public static String DB_PATH;
 
@@ -53,15 +52,15 @@ public class ResepiProvider extends SQLiteOpenHelper {
         return context.getDatabasePath(DB_NAME).exists();
     }
 
-    private void copyDB() throws Exception { // copy resepi.db from external file to app internal path
+    private void copyDB() throws Exception { // copy resepi_100.db from external file to app internal path
         InputStream inputStream;
         OutputStream outputStream;
         int dataLength;
 
-        inputStream = context.getAssets().open(DB_NAME); // secify inputstream toward resepi.db file
+        inputStream = context.getAssets().open(DB_NAME); // secify inputstream toward resepi_100.db file
         outputStream = new FileOutputStream(DB_PATH); // specify outputstream towards app internal path
 
-        // copy resepi.db from external file to app internal path
+        // copy resepi_100.db from external file to app internal path
         byte[] buffer = new byte[1024];
         while ((dataLength = inputStream.read(buffer)) > 0) {
             outputStream.write(buffer, 0, dataLength);
@@ -515,11 +514,14 @@ public class ResepiProvider extends SQLiteOpenHelper {
         // get bahan info for resepi
         resepiBahan = new ArrayList<>();
         while (!cursorBahan.isAfterLast()) {
-            int bahanDesc;
-            String bahanName;
+            String bahanDesc, bahanName;
 
-            bahanDesc = cursorBahan.getInt(cursorBahan.getColumnIndex("bahanDesc"));
+            bahanDesc = cursorBahan.getString(cursorBahan.getColumnIndex("bahanDesc"));
             bahanName = cursorBahan.getString(cursorBahan.getColumnIndex("bahanName"));
+
+            if(bahanDesc == null)
+                bahanDesc = "";
+
             resepiBahan.add(new Pair<>(String.valueOf(bahanDesc), bahanName));
 
             cursorBahan.moveToNext();
@@ -530,7 +532,7 @@ public class ResepiProvider extends SQLiteOpenHelper {
         for(int x=0 ; x<cursorBahan.getCount() ; x++) {
             Bitmap bahanImg;
 
-            bahanImg = byteArrayToBitmap(cursorBahan.getBlob(cursorBahan.getColumnIndex("bahanGambar")), 300, 200);
+            bahanImg = byteArrayToBitmap(cursorBahan.getBlob(cursorBahan.getColumnIndex("bahanGambar")), 100, 100);
             resepiBahanImg[x] = bahanImg;
         }
 

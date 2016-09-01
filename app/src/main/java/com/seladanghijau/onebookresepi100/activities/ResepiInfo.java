@@ -3,12 +3,16 @@ package com.seladanghijau.onebookresepi100.activities;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +28,15 @@ import android.widget.Toast;
 
 import com.seladanghijau.onebookresepi100.R;
 import com.seladanghijau.onebookresepi100.adapters.DrawerMenuListAdapter;
+import com.seladanghijau.onebookresepi100.adapters.ResepiBahanAdapter;
 import com.seladanghijau.onebookresepi100.adapters.ResepiLangkahAdapter;
 import com.seladanghijau.onebookresepi100.asynctask.DrawerMenuListAsyncTask;
 import com.seladanghijau.onebookresepi100.asynctask.ResepiInfoAsyncTask;
 import com.seladanghijau.onebookresepi100.dto.Resepi;
 import com.seladanghijau.onebookresepi100.manager.ResepiManager;
 import com.seladanghijau.onebookresepi100.provider.ILoader;
+
+import java.util.ArrayList;
 
 public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnClickListener, AdapterView.OnItemClickListener {
     // views
@@ -116,6 +123,7 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
                 Toast.makeText(this, "Added to favorite", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.llShare:
+                shareResepi(namaResepi);
                 break;
         }
     }
@@ -160,7 +168,7 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         tvResepiName.setText(resepiInfo.getName());
         tvRingkasan.setText(resepiInfo.getRingkasan());
         lvLangkah.setAdapter(new ResepiLangkahAdapter(this, resepiInfo.getLangkah()));
-        // lvBahan.setAdapter(); FIXME: tunjuk list of bahan dalam tab bahan
+        lvBahan.setAdapter(new ResepiBahanAdapter(this, resepiInfo.getBahan(), resepiInfo.getBahanImg()));
 
         lvLangkah.invalidate();
         lvBahan.invalidate();
@@ -202,6 +210,18 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         else if(!drawer.isDrawerOpen(Gravity.LEFT))
             drawer.openDrawer(Gravity.LEFT);
     }
+
+    private void shareResepi(String resepiName) { // FIXME - ubah sharing content
+        Intent shareIntent;
+
+        shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "This is " + resepiName + ". Shared to you from Onebook Resepi 100.");
+        Intent.createChooser(shareIntent, "Onebook Resepi 100");
+
+        startActivity(Intent.createChooser(shareIntent, this.getPackageName()));
+    }
     // ---------------------------------------------------------------------------------------------
 
     // other methods -------------------------------------------------------------------------------
@@ -217,6 +237,18 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         tsLangkah = thResepiInfo.newTabSpec("Langkah"); // langkah tab -----------------------------
         tsLangkah.setIndicator(LayoutInflater.from(this).inflate(R.layout.tab_langkah, null));
         tsLangkah.setContent(R.id.tabLangkah);
+
+        thResepiInfo.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            public void onTabChanged(String tabId) {
+                // for unselected tab
+                for (int i = 0; i < thResepiInfo.getTabWidget().getChildCount(); i++) {
+                    thResepiInfo.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#01A89E"));
+                }
+
+                // for selected tab
+                thResepiInfo.getTabWidget().getChildAt(thResepiInfo.getCurrentTab()).setBackgroundColor(Color.parseColor("#ffffff"));
+            }
+        });
 
         // add tab to tab host
         thResepiInfo.addTab(tsRingkasan);
