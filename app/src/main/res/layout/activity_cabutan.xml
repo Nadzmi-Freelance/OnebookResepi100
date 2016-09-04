@@ -23,6 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:fontFamily="serif"
                 android:textSize="25sp" />
             <TextView
                 android:text="Onebook Resepi 2016"
@@ -30,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#0000FF"
                 android:textSize="25sp"
+                android:fontFamily="serif"
                 android:gravity="center" />
 
             <TextView
@@ -38,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="20sp"
+                android:fontFamily="sans-serif"
                 android:layout_marginBottom="30dp"
                 android:layout_marginTop="20dp" />
 
@@ -46,6 +49,8 @@
                 android:text="Muat turun sekarang"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
                 android:textSize="20sp"
                 android:textColor="#FFFF00"
                 android:background="#FF2626" />
@@ -57,6 +62,7 @@
                 android:layout_marginTop="10dp"
                 android:textColor="#FF0000"
                 android:textSize="20sp"
+                android:fontFamily="sans-serif-condensed"
                 android:gravity="center" />
 
             <TextView
@@ -66,6 +72,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#0000FF"
                 android:textSize="20sp"
+                android:fontFamily="sans-serif-condensed"
                 android:gravity="center" />
         </LinearLayout>
     </FrameLayout>
