@@ -33,7 +33,7 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
     ListView lvMenu;
     View actionbarView;
     ImageButton ibMenu, ibSearch;
-    TextView tvWebAdddress, tvTitle;
+    TextView tvWebAdddress;
     Button btnMuatTurun;
     DrawerLayout drawer;
 
@@ -62,13 +62,10 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
         ibMenu = (ImageButton) actionbarView.findViewById(R.id.ibMenu);
         ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch);
         ibSearch.setVisibility(View.GONE);
-        tvTitle = (TextView) actionbarView.findViewById(R.id.tvTitle);
         lvMenu = (ListView) findViewById(R.id.lvMenu);
         tvWebAdddress = (TextView) findViewById(R.id.tvWebAdddress);
         btnMuatTurun = (Button) findViewById(R.id.btnMuatTurun);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
-
-        tvTitle.setText("Cabutan");
 
         // setup listener
         ibMenu.setOnClickListener(this);

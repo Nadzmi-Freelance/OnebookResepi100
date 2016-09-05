@@ -28,7 +28,7 @@ public class TentangKami extends AppCompatActivity implements ILoader, View.OnCl
     // views
     View actionbarView;
     ImageButton ibMenu, ibSearch;
-    TextView tvWebPage, tvEmail, tvTitle;
+    TextView tvWebPage, tvEmail;
     ListView lvMenu;
     DrawerLayout drawer;
 
@@ -56,14 +56,11 @@ public class TentangKami extends AppCompatActivity implements ILoader, View.OnCl
         // setup views
         ibMenu = (ImageButton) actionbarView.findViewById(R.id.ibMenu);
         ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch);
-        tvTitle = (TextView) actionbarView.findViewById(R.id.tvTitle);
         ibSearch.setVisibility(View.GONE);
         lvMenu = (ListView) findViewById(R.id.lvMenu);
         tvWebPage = (TextView) findViewById(R.id.tvWebPage);
         tvEmail = (TextView) findViewById(R.id.tvEmail);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
-
-        tvTitle.setText("Tentang Kami");
 
         // setup listener
         ibMenu.setOnClickListener(this);

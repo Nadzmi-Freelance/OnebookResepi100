@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements ILoader, View.OnC
     // views
     View actionbarView;
     ImageButton ibMenu, ibSearch, ibSearchButton;
-    TextView tvTitle;
     ListView lvKategoriResepi, lvMenu;
     DrawerLayout drawer;
     RelativeLayout rlSearchPanel;
@@ -64,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements ILoader, View.OnC
         // setup views
         ibMenu = (ImageButton) actionbarView.findViewById(R.id.ibMenu);
         ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch);
-        tvTitle = (TextView) actionbarView.findViewById(R.id.tvTitle);
         lvKategoriResepi = (ListView) findViewById(R.id.lvKategoriResepi);
         lvMenu = (ListView) findViewById(R.id.lvMenu);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
@@ -72,8 +70,6 @@ public class MainActivity extends AppCompatActivity implements ILoader, View.OnC
         ibSearchButton = (ImageButton) findViewById(R.id.ibSearchButton);
         rlSearchPanel = (RelativeLayout) findViewById(R.id.rlSearchPanel);
         rlSearchPanel.setVisibility(View.GONE);
-
-        tvTitle.setText("Home");
 
         // setup listener
         ibMenu.setOnClickListener(this);
@@ -133,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements ILoader, View.OnC
                 break;
             case R.id.lvKategoriResepi:
                 startActivity(new Intent(this, ResepiList.class).putExtra("kategori_resepi", kategoriResepiList[position]));
-                tvTitle.setText(kategoriResepiList[position]);
                 break;
         }
     }

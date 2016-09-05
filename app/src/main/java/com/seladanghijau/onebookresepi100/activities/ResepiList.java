@@ -39,7 +39,6 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
     ImageButton ibMenu, ibSearch;
     ListView lvMenu, lvResepiList;
     EditText etSearch;
-    TextView tvTitle;
     ImageButton ibSearchButton;
     RelativeLayout rlSearchPanel;
 
@@ -69,7 +68,6 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
         // setup views
         ibMenu = (ImageButton) actionbarView.findViewById(R.id.ibMenu);
         ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch);
-        tvTitle = (TextView) actionbarView.findViewById(R.id.tvTitle);
         lvMenu = (ListView) findViewById(R.id.lvMenu);
         lvResepiList = (ListView) findViewById(R.id.lvResepiList);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
@@ -93,9 +91,6 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
     private void initVars() {
         resepiManager = new ResepiManager(this);
         categoryName = getIntent().getStringExtra("kategori_resepi");
-
-        tvTitle.setText(categoryName);
-        tvTitle.invalidate();
 
         new DrawerMenuListAsyncTask(this, this).execute();
         new SetupResepiListAsyncTask(this, this, resepiManager, categoryName).execute();
@@ -138,8 +133,6 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
                     startActivity(new Intent(this, Cabutan.class));
                 else if(position == 24)
                     startActivity(new Intent(this, TentangKami.class));
-
-                tvTitle.setText(drawerMenuList[position]);
                 break;
             case R.id.lvResepiList:
                 startActivity(new Intent(this, ResepiInfo.class).putExtra("nama_resepi", resepiNameList[position]));

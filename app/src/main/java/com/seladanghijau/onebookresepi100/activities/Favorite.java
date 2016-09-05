@@ -30,7 +30,6 @@ import java.lang.ref.WeakReference;
 public class Favorite extends AppCompatActivity implements ILoader, View.OnClickListener, AdapterView.OnItemClickListener {
     // views
     View actionbarView;
-    TextView tvTitle;
     ImageButton ibMenu, ibSearch;
     ListView lvMenu, lvFavorite;
     DrawerLayout drawer;
@@ -60,12 +59,9 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
         ibMenu = (ImageButton) actionbarView.findViewById(R.id.ibMenu);
         ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch);
         ibSearch.setVisibility(View.GONE);
-        tvTitle = (TextView) actionbarView.findViewById(R.id.tvTitle);
         lvMenu = (ListView) findViewById(R.id.lvMenu);
         lvFavorite = (ListView) findViewById(R.id.lvFavorite);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
-
-        tvTitle.setText("Favorite");
 
         // setup listener
         ibMenu.setOnClickListener(this);

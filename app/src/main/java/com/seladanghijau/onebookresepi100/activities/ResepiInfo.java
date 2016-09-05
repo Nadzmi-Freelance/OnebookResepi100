@@ -38,6 +38,7 @@ import com.seladanghijau.onebookresepi100.asynctask.ResepiInfoAsyncTask;
 import com.seladanghijau.onebookresepi100.dto.Resepi;
 import com.seladanghijau.onebookresepi100.manager.ResepiManager;
 import com.seladanghijau.onebookresepi100.provider.ILoader;
+import com.seladanghijau.onebookresepi100.provider.ResepiProvider;
 
 import java.util.ArrayList;
 
@@ -49,7 +50,7 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
     ImageView ivResepiImg;
     TabHost thResepiInfo;
     DrawerLayout drawer;
-    TextView tvResepiName, tvRingkasan, tvTitle;
+    TextView tvResepiName, tvRingkasan;
     ImageButton ibShare, ibFavorite;
 
     // variables
@@ -79,7 +80,6 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         ibMenu = (ImageButton) actionbarView.findViewById(R.id.ibMenu);
         ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch);
         ibSearch.setVisibility(View.GONE);
-        tvTitle = (TextView) actionbarView.findViewById(R.id.tvTitle);
         ivResepiImg = (ImageView) findViewById(R.id.ivResepiImg);
         tvResepiName = (TextView) findViewById(R.id.tvResepiName);
         tvRingkasan = (TextView) findViewById(R.id.tvRingkasan);
@@ -101,10 +101,6 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
     private void initVars() {
         resepiManager = new ResepiManager(this);
         namaResepi = getIntent().getStringExtra("nama_resepi");
-
-        tvTitle.setText(namaResepi);
-        tvTitle.setTextSize(20);
-        tvTitle.invalidate();
 
         setupTabhost(); // setup tabhost
         new DrawerMenuListAsyncTask(this, this).execute();
@@ -203,11 +199,45 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
 
     private void shareResepi(String resepiName) {
         Intent shareIntent;
+        String shareMessage, nama, ringkasan, bahan, langkah;
+        String currentBahanDesc;
+        Resepi tempResepi;
+
+        tempResepi = resepiManager.getResepiInfo(resepiManager.getResepiId(resepiName));
+
+        nama = tempResepi.getName();
+        ringkasan = tempResepi.getRingkasan();
+
+        int a=1;
+        bahan = "";
+        currentBahanDesc = "";
+        for(int x=0 ; x<tempResepi.getBahan().size() ; x++) {
+            if(currentBahanDesc.isEmpty() || !currentBahanDesc.equalsIgnoreCase(tempResepi.getBahan().get(x).first)) {
+                currentBahanDesc = tempResepi.getBahan().get(x).first;
+
+                a = 1;
+                bahan += "\n-Bahan " + currentBahanDesc + "-\n" +
+                        a + ") " + tempResepi.getBahan().get(x).second + "\n";
+            } else
+                bahan += a + ") " + tempResepi.getBahan().get(x).second + "\n";
+
+            a++;
+        }
+
+        langkah = "";
+        for(int x=0 ; x<tempResepi.getLangkah().length ; x++) {
+            langkah += (x+1) + ") " + tempResepi.getLangkah()[x] + "\n";
+        }
+
+        shareMessage = "Nama Resepi:\n" + nama + "\n\n" +
+                "Ringkasan:\n" + ringkasan + "\n" +
+                "Bahan:\n" + bahan + "\n" +
+                "Cara Masak:\n" + langkah;
 
         shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "This is " + resepiName + ". Shared to you from Onebook Resepi 100.");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
         Intent.createChooser(shareIntent, "Onebook Resepi 100");
 
         startActivity(Intent.createChooser(shareIntent, this.getPackageName()));

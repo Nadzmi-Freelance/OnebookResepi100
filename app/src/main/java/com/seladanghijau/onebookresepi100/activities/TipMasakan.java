@@ -30,7 +30,6 @@ public class TipMasakan extends AppCompatActivity implements ILoader, View.OnCli
     View actionbarView;
     ImageButton ibMenu, ibSearch;
     ListView lvMenu, lvTips;
-    TextView tvTitle;
     DrawerLayout drawer;
 
     // variables
@@ -56,13 +55,10 @@ public class TipMasakan extends AppCompatActivity implements ILoader, View.OnCli
         // setup views
         ibMenu = (ImageButton) actionbarView.findViewById(R.id.ibMenu);
         ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch);
-        tvTitle = (TextView) actionbarView.findViewById(R.id.tvTitle);
         ibSearch.setVisibility(View.GONE);
         lvMenu = (ListView) findViewById(R.id.lvMenu);
         lvTips = (ListView) findViewById(R.id.lvTips);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
-
-        tvTitle.setText("Tips Masakan");
 
         // setup listener
         ibMenu.setOnClickListener(this);
