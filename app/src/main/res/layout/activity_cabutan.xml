@@ -29,8 +29,9 @@
                 android:text="Onebook Resepi 2016"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#0000FF"
+                android:textColor="#92278F"
                 android:textSize="25sp"
+                android:textStyle="bold"
                 android:fontFamily="serif"
                 android:gravity="center" />
 

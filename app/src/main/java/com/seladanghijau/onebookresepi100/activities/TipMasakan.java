@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -85,6 +86,7 @@ public class TipMasakan extends AppCompatActivity implements ILoader, View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ibMenu:
+                buttonEffect(ibMenu);
                 slideDrawer(drawer);
                 break;
         }
@@ -132,6 +134,7 @@ public class TipMasakan extends AppCompatActivity implements ILoader, View.OnCli
     public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(Resepi resepiInfo) {}
     public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {}
+    public void onLoad(TypedArray rempahImgList) {}
     // ---------------------------------------------------------------------------------------------
 
     // util  methods -------------------------------------------------------------------------------
@@ -140,6 +143,12 @@ public class TipMasakan extends AppCompatActivity implements ILoader, View.OnCli
             drawer.closeDrawer(Gravity.LEFT);
         else if(!drawer.isDrawerOpen(Gravity.LEFT))
             drawer.openDrawer(Gravity.LEFT);
+    }
+
+    private void buttonEffect(View view) {
+        AlphaAnimation buttonClick = new AlphaAnimation(1f, 0.5f);
+
+        view.startAnimation(buttonClick);
     }
     // ---------------------------------------------------------------------------------------------
 }

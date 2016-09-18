@@ -46,12 +46,15 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cabutan);
 
-        initViews();
-        initVars();
+        initViews(); // initialize views
+        initVars(); // initialize variables
+
+        // invalidate views
+        lvMenu.invalidate(); // invalidate drawer menu
     }
 
     // initialization ------------------------------------------------------------------------------
-    private void initViews() {
+    private void initViews() { // initialize views
         // setup actionbar
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
@@ -59,13 +62,13 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
         actionbarView = getSupportActionBar().getCustomView();
 
         // setup views
-        ibMenu = (ImageButton) actionbarView.findViewById(R.id.ibMenu);
-        ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch);
-        ibSearch.setVisibility(View.GONE);
-        lvMenu = (ListView) findViewById(R.id.lvMenu);
-        tvWebAdddress = (TextView) findViewById(R.id.tvWebAdddress);
-        btnMuatTurun = (Button) findViewById(R.id.btnMuatTurun);
-        drawer = (DrawerLayout) findViewById(R.id.drawer);
+        ibMenu = (ImageButton) actionbarView.findViewById(R.id.ibMenu); // menu imagebutton
+        ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch); // search imagebutton
+        ibSearch.setVisibility(View.GONE); // setup visibility of search imagebutton, this activity doesn't use it
+        lvMenu = (ListView) findViewById(R.id.lvMenu); // setup menu listview in drawer menu
+        tvWebAdddress = (TextView) findViewById(R.id.tvWebAdddress); // setup goto web click textview
+        btnMuatTurun = (Button) findViewById(R.id.btnMuatTurun); // setup download button for Full app
+        drawer = (DrawerLayout) findViewById(R.id.drawer); // setup drawer menu layout
 
         // setup listener
         ibMenu.setOnClickListener(this);
@@ -73,34 +76,34 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
         tvWebAdddress.setOnClickListener(this);
         btnMuatTurun.setOnClickListener(this);
 
+        // setup weak ref for listviews
         lvMenuWeakRef = new WeakReference<>(lvMenu);
     }
 
-    private void initVars() {
-        webAddress = "https://www.onebook.com.my/v1/cabutan.html";
-        app200Address = "https://play.google.com/store?hl=en"; // testing purpose
+    private void initVars() { // initialize variables
+        webAddress = "http://www.onebook.com.my/v1/html/cabutan.html"; // default web address
+        app200Address = "http://play.google.com/store?hl=en"; // [testing purpose] default url for full application
 
-        new DrawerMenuListAsyncTask(this, this).execute();
-
-        lvMenu.invalidate();
+        new DrawerMenuListAsyncTask(this, this).execute(); // get drawer menu list
     }
     // ---------------------------------------------------------------------------------------------
 
     // listener ------------------------------------------------------------------------------------
-    public void onBackPressed() {
+    public void onBackPressed() { // on back button pressed, kill this activity
         finish();
     }
 
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.ibMenu:
-                slideDrawer(drawer);
+            case R.id.ibMenu: // clicked menu button
+                buttonEffect(ibMenu); // animate button click
+                slideDrawer(drawer); // slide menu drawer to open or close
                 break;
-            case R.id.tvWebAdddress:
-                Uri webUri = Uri.parse(webAddress).buildUpon().build();
+            case R.id.tvWebAdddress: // clicked goto web textview
+                buttonEffect(tvWebAdddress); // animate button click
 
-                buttonEffect(tvWebAdddress);
-                startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, webUri), "Choose web browser"));
+                Uri webUri = Uri.parse(webAddress).buildUpon().build(); // build uri
+                startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, webUri), "Choose web browser")); // goto website with own browser
                 break;
             case R.id.btnMuatTurun:
                 Uri app200Uri = Uri.parse(app200Address).buildUpon().build();
@@ -132,7 +135,7 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
     // ---------------------------------------------------------------------------------------------
 
     // loader interface methods --------------------------------------------------------------------
-    public void onLoadMenuDrawer(String[] drawerMenuList, TypedArray ikonDrawerMenuList) {
+    public void onLoadMenuDrawer(String[] drawerMenuList, TypedArray ikonDrawerMenuList) { // load menu drawer listview
         ListView listViewMenu;
 
         listViewMenu = lvMenuWeakRef.get();
@@ -147,6 +150,7 @@ public class Cabutan extends AppCompatActivity implements ILoader, View.OnClickL
     public void onLoad(Resepi resepiInfo) {}
     public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(String[] tipsMasakan) {}
+    public void onLoad(TypedArray rempahImgList) {}
     // ---------------------------------------------------------------------------------------------
 
     // util  methods -------------------------------------------------------------------------------

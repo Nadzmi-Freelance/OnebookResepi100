@@ -16,4 +16,5 @@ public interface ILoader {
     void onLoad(Resepi resepiInfo); // for resepi info activity
     void onLoad(String[] resepiNameList, Bitmap[] bgResepiList);
     void onLoad(String[] tipsMasakanList); // for tips masakan activity
+    public void onLoad(TypedArray rempahImgList); // for rempah list
 }

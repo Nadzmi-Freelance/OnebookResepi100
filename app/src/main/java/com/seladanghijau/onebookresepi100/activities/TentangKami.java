@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -72,7 +73,7 @@ public class TentangKami extends AppCompatActivity implements ILoader, View.OnCl
     }
 
     private void initVars() {
-        webAddress = "https://www.onebook.com.my";
+        webAddress = "http://www.onebook.com.my/v1";
         emailAddress = "onepage2u@gmail.com";
 
         new DrawerMenuListAsyncTask(this, this).execute();
@@ -89,13 +90,18 @@ public class TentangKami extends AppCompatActivity implements ILoader, View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ibMenu:
+                buttonEffect(ibMenu);
                 slideDrawer(drawer);
                 break;
             case R.id.tvWebPage:
+                buttonEffect(tvWebPage);
+
                 Uri webUri = Uri.parse(webAddress).buildUpon().build();
                 startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, webUri), "Choose web browser"));
                 break;
             case R.id.tvEmail:
+                buttonEffect(tvEmail);
+
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 emailIntent.setData(Uri.parse("mailto:"));
                 emailIntent.setType("text/plain");
@@ -143,6 +149,7 @@ public class TentangKami extends AppCompatActivity implements ILoader, View.OnCl
     public void onLoad(Resepi resepiInfo) {}
     public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(String[] tipsMasakan) {}
+    public void onLoad(TypedArray rempahImgList) {}
     // ---------------------------------------------------------------------------------------------
 
     // util  methods -------------------------------------------------------------------------------
@@ -151,6 +158,12 @@ public class TentangKami extends AppCompatActivity implements ILoader, View.OnCl
             drawer.closeDrawer(Gravity.LEFT);
         else if(!drawer.isDrawerOpen(Gravity.LEFT))
             drawer.openDrawer(Gravity.LEFT);
+    }
+
+    private void buttonEffect(View view) {
+        AlphaAnimation buttonClick = new AlphaAnimation(1f, 0.5f);
+
+        view.startAnimation(buttonClick);
     }
     // ---------------------------------------------------------------------------------------------
 }

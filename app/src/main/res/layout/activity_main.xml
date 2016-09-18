@@ -21,6 +21,7 @@
             <EditText
                 android:id="@+id/etSearch"
                 android:hint="Search"
+                android:inputType="text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -36,10 +37,28 @@
                 android:src="@drawable/ic_search_black_24dp" />
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/tvNoResult"
+            android:text="No result"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:fontFamily="serif"
+            android:visibility="gone" />
+
         <ListView
             android:id="@+id/lvKategoriResepi"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <ListView
+            android:id="@+id/lvSearchResepi"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
     </LinearLayout>
 
     <!-- The navigation drawer -->

@@ -36,6 +36,16 @@ public class SearchResepiNameAsyncTask extends AsyncTask<Void, Void, Void> {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    public SearchResepiNameAsyncTask(Context context, ILoader loader, ResepiManager resepiManager, String resepiName) {
+        this.context = context;
+        this.loader = loader;
+        this.resepiManager = resepiManager;
+        this.resepiName = resepiName;
+        this.category = "";
+
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
     protected void onPreExecute() {
         super.onPreExecute();
 
@@ -58,15 +68,22 @@ public class SearchResepiNameAsyncTask extends AsyncTask<Void, Void, Void> {
 
         if(resepiName.isEmpty())
             resepiNameListWithImg = resepiManager.getResepiNameListWithImg();
+        else if(category.isEmpty())
+            resepiNameListWithImg = resepiManager.getResepiNameListWithImg(resepiName);
         else
-            resepiNameListWithImg = resepiManager.getResepiNameListWithImg(resepiManager.getResepiCategoryId(category), resepiManager.getResepiId(resepiName));
+            resepiNameListWithImg = resepiManager.getResepiNameListWithImg(resepiManager.getResepiCategoryId(category), resepiName);
 
-        resepiNameList = new String[resepiNameListWithImg.size()];
-        imejresepiList = new Bitmap[resepiNameListWithImg.size()];
+        if(resepiNameListWithImg != null) {
+            resepiNameList = new String[resepiNameListWithImg.size()];
+            imejresepiList = new Bitmap[resepiNameListWithImg.size()];
 
-        for (int x=0 ; x<resepiNameListWithImg.size() ; x++) {
-            resepiNameList[x] = resepiNameListWithImg.get(x).first;
-            imejresepiList[x] = resepiNameListWithImg.get(x).second;
+            for (int x=0 ; x<resepiNameListWithImg.size() ; x++) {
+                resepiNameList[x] = resepiNameListWithImg.get(x).first;
+                imejresepiList[x] = resepiNameListWithImg.get(x).second;
+            }
+        } else {
+            resepiNameList = null;
+            imejresepiList = null;
         }
 
         return null;

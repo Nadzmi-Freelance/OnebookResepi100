@@ -40,10 +40,10 @@
 
                 <TextView
                     android:id="@+id/tvWebPage"
-                    android:text="www.onebook.com.my"
+                    android:text="@string/onebook_web"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
                     android:fontFamily="sans-serif"
                     android:textStyle="bold"
                     android:textSize="20sp"
@@ -51,7 +51,7 @@
                     android:gravity="center" />
 
                 <TextView
-                    android:text="onepage2u@gmail.com"
+                    android:text="@string/app_email"
                     android:id="@+id/tvEmail"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -59,7 +59,18 @@
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:textColor="#0000FF"
+                    android:layout_marginTop="10dp"
                     android:gravity="center" />
+
+                <TextView
+                    android:text="@string/tentangkami_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -69,7 +80,7 @@
             </LinearLayout>
 
             <TextView
-                android:text="Version 3.1/2016"
+                android:text="@string/app_version"
                 android:id="@+id/tvVersion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

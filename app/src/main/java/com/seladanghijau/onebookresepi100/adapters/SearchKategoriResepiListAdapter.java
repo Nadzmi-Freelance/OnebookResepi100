@@ -40,24 +40,28 @@ public class SearchKategoriResepiListAdapter extends BaseAdapter {
         View rowView;
         Holder viewHolder;
 
-        rowView = convertView;
-        if (convertView == null) {
-            rowView = layoutInflater.inflate(R.layout.layout_kategori_resepi_list, null);
+        if(getCount() == 0)
+            return null;
+        else {
+            rowView = convertView;
+            if (convertView == null) {
+                rowView = layoutInflater.inflate(R.layout.layout_kategori_resepi_list, null);
 
-            viewHolder = new Holder();
-            viewHolder.tvKategoriResepiName = (TextView) rowView.findViewById(R.id.tvKategoriResepiName);
-            viewHolder.tvBilResepi = (TextView) rowView.findViewById(R.id.tvBilResepi);
-            viewHolder.ivKategoriBg = (ImageView) rowView.findViewById(R.id.ivKategoriBg);
+                viewHolder = new Holder();
+                viewHolder.tvKategoriResepiName = (TextView) rowView.findViewById(R.id.tvKategoriResepiName);
+                viewHolder.tvBilResepi = (TextView) rowView.findViewById(R.id.tvBilResepi);
+                viewHolder.ivKategoriBg = (ImageView) rowView.findViewById(R.id.ivKategoriBg);
 
-            rowView.setTag(viewHolder);
-        } else
-            viewHolder = (Holder) rowView.getTag();
+                rowView.setTag(viewHolder);
+            } else
+                viewHolder = (Holder) rowView.getTag();
 
-        viewHolder.tvKategoriResepiName.setText(kategoriResepiList[position]);
-        viewHolder.tvBilResepi.setText(String.valueOf(resepiCount[position]));
-        viewHolder.ivKategoriBg.setImageBitmap(imejKategoriResepiList[position]);
+            viewHolder.tvKategoriResepiName.setText(kategoriResepiList[position]);
+            viewHolder.tvBilResepi.setText(String.valueOf(resepiCount[position]));
+            viewHolder.ivKategoriBg.setImageBitmap(imejKategoriResepiList[position]);
 
-        return rowView;
+            return rowView;
+        }
     }
 
     static class Holder {

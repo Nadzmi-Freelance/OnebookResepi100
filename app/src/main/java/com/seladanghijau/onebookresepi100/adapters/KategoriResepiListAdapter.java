@@ -37,27 +37,25 @@ public class KategoriResepiListAdapter extends BaseAdapter {
     public long getItemId(int position) { return position; }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        View rowView;
         Holder viewHolder;
 
-        rowView = convertView;
         if (convertView == null) {
-            rowView = layoutInflater.inflate(R.layout.layout_kategori_resepi_list, null);
+            convertView = layoutInflater.inflate(R.layout.layout_kategori_resepi_list, null);
 
             viewHolder = new Holder();
-            viewHolder.tvKategoriResepiName = (TextView) rowView.findViewById(R.id.tvKategoriResepiName);
-            viewHolder.tvBilResepi = (TextView) rowView.findViewById(R.id.tvBilResepi);
-            viewHolder.ivKategoriBg = (ImageView) rowView.findViewById(R.id.ivKategoriBg);
+            viewHolder.tvKategoriResepiName = (TextView) convertView.findViewById(R.id.tvKategoriResepiName);
+            viewHolder.tvBilResepi = (TextView) convertView.findViewById(R.id.tvBilResepi);
+            viewHolder.ivKategoriBg = (ImageView) convertView.findViewById(R.id.ivKategoriBg);
 
-            rowView.setTag(viewHolder);
+            convertView.setTag(viewHolder);
         } else
-            viewHolder = (Holder) rowView.getTag();
+            viewHolder = (Holder) convertView.getTag();
 
         viewHolder.tvKategoriResepiName.setText(kategoriResepiList[position]);
         viewHolder.tvBilResepi.setText(String.valueOf(resepiCount[position]));
         viewHolder.ivKategoriBg.setBackground(imejKategoriResepiList.getDrawable(position));
 
-        return rowView;
+        return convertView;
     }
 
     static class Holder {

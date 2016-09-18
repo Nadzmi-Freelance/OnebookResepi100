@@ -11,8 +11,10 @@ import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -21,9 +23,11 @@ import android.widget.Toast;
 
 import com.seladanghijau.onebookresepi100.R;
 import com.seladanghijau.onebookresepi100.adapters.DrawerMenuListAdapter;
+import com.seladanghijau.onebookresepi100.adapters.RempahListAdapter;
 import com.seladanghijau.onebookresepi100.adapters.ResepiListAdapter;
 import com.seladanghijau.onebookresepi100.asynctask.DrawerMenuListAsyncTask;
 import com.seladanghijau.onebookresepi100.asynctask.SearchResepiNameAsyncTask;
+import com.seladanghijau.onebookresepi100.asynctask.SetupRempahListAsyncTask;
 import com.seladanghijau.onebookresepi100.asynctask.SetupResepiListAsyncTask;
 import com.seladanghijau.onebookresepi100.dto.Resepi;
 import com.seladanghijau.onebookresepi100.manager.ResepiManager;
@@ -41,13 +45,17 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
     EditText etSearch;
     ImageButton ibSearchButton;
     RelativeLayout rlSearchPanel;
+    TextView tvNoResult;
+    GridView gvRempahList;
 
     // variables
     int category;
     String categoryName;
     ResepiManager resepiManager;
     String[] drawerMenuList, resepiNameList;
+    TypedArray rempahImgList;
     WeakReference<ListView> lvResepiWeakRef, lvMenuWeakRef;
+    WeakReference<GridView> gvRempahWeakRef;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +78,10 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
         ibSearch = (ImageButton) actionbarView.findViewById(R.id.ibSearch);
         lvMenu = (ListView) findViewById(R.id.lvMenu);
         lvResepiList = (ListView) findViewById(R.id.lvResepiList);
+        gvRempahList = (GridView) findViewById(R.id.gvRempahList);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
         etSearch = (EditText) findViewById(R.id.etSearch);
+        tvNoResult = (TextView) findViewById(R.id.tvNoResult);
         ibSearchButton = (ImageButton) findViewById(R.id.ibSearchButton);
         rlSearchPanel = (RelativeLayout) findViewById(R.id.rlSearchPanel);
         rlSearchPanel.setVisibility(View.GONE);
@@ -81,11 +91,13 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
         ibSearch.setOnClickListener(this);
         lvMenu.setOnItemClickListener(this);
         lvResepiList.setOnItemClickListener(this);
+        gvRempahList.setOnItemClickListener(this);
         ibSearchButton.setOnClickListener(this);
 
         // setup weak ref
         lvMenuWeakRef = new WeakReference<>(lvMenu);
         lvResepiWeakRef = new WeakReference<>(lvResepiList);
+        gvRempahWeakRef = new WeakReference<>(gvRempahList);
     }
 
     private void initVars() {
@@ -93,7 +105,10 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
         categoryName = getIntent().getStringExtra("kategori_resepi");
 
         new DrawerMenuListAsyncTask(this, this).execute();
-        new SetupResepiListAsyncTask(this, this, resepiManager, categoryName).execute();
+        if(categoryName.equalsIgnoreCase("rempah ratus"))
+            new SetupRempahListAsyncTask(this, this, resepiManager).execute();
+        else
+            new SetupResepiListAsyncTask(this, this, resepiManager, categoryName).execute();
     }
     // ---------------------------------------------------------------------------------------------
 
@@ -105,15 +120,18 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ibMenu:
+                buttonEffect(ibMenu);
                 slideDrawer(drawer);
                 break;
             case R.id.ibSearch:
+                buttonEffect(ibSearch);
                 toggelSearchPanel(rlSearchPanel);
                 break;
             case R.id.ibSearchButton:
                 String searchResepi = etSearch.getText().toString();
 
-                new SearchResepiNameAsyncTask(this, this, resepiManager, categoryName, searchResepi).execute();
+                buttonEffect(ibSearchButton);
+                new SearchResepiNameAsyncTask(this, this, resepiManager, searchResepi).execute();
                 break;
         }
     }
@@ -137,6 +155,13 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
             case R.id.lvResepiList:
                 startActivity(new Intent(this, ResepiInfo.class).putExtra("nama_resepi", resepiNameList[position]));
                 break;
+            case R.id.gvRempahList:
+                Intent fullImgIntent;
+
+                fullImgIntent = new Intent(this, RempahFullScreen.class);
+                fullImgIntent.putExtra("imgRes-id", rempahImgList.getResourceId(position, 0));
+                startActivity(fullImgIntent);
+                break;
         }
     }
     // ---------------------------------------------------------------------------------------------
@@ -153,19 +178,11 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
         this.drawerMenuList = drawerMenuList;
     }
 
-    public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {
+    public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) { // default function
         ListView listViewResepi;
 
-        listViewResepi = lvResepiWeakRef.get();
-        listViewResepi.setAdapter(new ResepiListAdapter(this, resepiNameList, bgResepiList));
-
-        lvResepiList.invalidate();
-
-        this.resepiNameList = resepiNameList;
-    }
-
-    public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {
-        ListView listViewResepi;
+        lvResepiList.setVisibility(View.VISIBLE);
+        gvRempahList.setVisibility(View.GONE);
 
         listViewResepi = lvResepiWeakRef.get();
         listViewResepi.setAdapter(new ResepiListAdapter(this, resepiNameList, bgResepiList));
@@ -176,9 +193,40 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
         this.resepiNameList = resepiNameList;
     }
 
+    public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) { // for search function
+        ListView listViewResepi;
+
+        listViewResepi = lvResepiWeakRef.get();
+        if(resepiNameList.length == 0 || bgResepiList.length == 0) {
+            tvNoResult.setVisibility(View.VISIBLE);
+            listViewResepi.setVisibility(View.GONE);
+        } else {
+            tvNoResult.setVisibility(View.GONE);
+            listViewResepi.setVisibility(View.VISIBLE);
+
+            listViewResepi.setAdapter(new ResepiListAdapter(this, resepiNameList, bgResepiList));
+            lvResepiList.invalidate();
+        }
+
+        this.resepiNameList = resepiNameList;
+    }
+
+    public void onLoad(TypedArray rempahImgList) { // for rempah list
+        GridView gvRempah;
+
+        lvResepiList.setVisibility(View.GONE);
+        gvRempahList.setVisibility(View.VISIBLE);
+
+        gvRempah = gvRempahWeakRef.get();
+        gvRempah.setAdapter(new RempahListAdapter(this, rempahImgList));
+        gvRempah.invalidate();
+
+        this.rempahImgList = rempahImgList;
+    }
+
+    public void onLoad(int[] resepiCount, String[] kategoriResepiList, Bitmap[] imejKategoriResepiList) {}
     public void onLoad(Resepi resepiInfo) {}
     public void onLoad(int[] resepiCount, String[] kategoriResepiList, TypedArray imejKategoriResepiList) {}
-    public void onLoad(int[] resepiCount, String[] kategoriResepiList, Bitmap[] imejKategoriResepiList) {}
     public void onLoad(String[] tipsMasakan) {}
     // ---------------------------------------------------------------------------------------------
 
@@ -194,12 +242,24 @@ public class ResepiList extends AppCompatActivity implements ILoader, View.OnCli
         if(v.getVisibility() == View.GONE) {
             v.setVisibility(View.VISIBLE);
             ibSearch.setBackgroundResource(R.drawable.ic_cancel_black_24dp);
+
+            if(drawer.isDrawerOpen(Gravity.LEFT))
+                slideDrawer(drawer);
         } else if(v.getVisibility() == View.VISIBLE) {
             v.setVisibility(View.GONE);
             ibSearch.setBackgroundResource(R.drawable.ic_search_black_24dp);
+
+            if(drawer.isDrawerOpen(Gravity.LEFT))
+                slideDrawer(drawer);
         }
 
         etSearch.setText(null);
+    }
+
+    private void buttonEffect(View view) {
+        AlphaAnimation buttonClick = new AlphaAnimation(1f, 0.5f);
+
+        view.startAnimation(buttonClick);
     }
     // ---------------------------------------------------------------------------------------------
 }

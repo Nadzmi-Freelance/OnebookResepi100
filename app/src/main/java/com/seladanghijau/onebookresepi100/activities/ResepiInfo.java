@@ -112,6 +112,7 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ibMenu:
+                buttonEffect(ibMenu);
                 slideDrawer(drawer);
                 break;
             case R.id.ibFavorite:
@@ -177,6 +178,7 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
     public void onLoad(int[] resepiCount, String[] kategoriResepiList, Bitmap[] imejKategoriResepiList) {}
     public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(String[] tipsMasakan) {}
+    public void onLoad(TypedArray rempahImgList) {}
     // ---------------------------------------------------------------------------------------------
 
     // util methods --------------------------------------------------------------------------------
@@ -212,7 +214,13 @@ public class ResepiInfo extends AppCompatActivity implements ILoader, View.OnCli
         bahan = "";
         currentBahanDesc = "";
         for(int x=0 ; x<tempResepi.getBahan().size() ; x++) {
-            if(currentBahanDesc.isEmpty() || !currentBahanDesc.equalsIgnoreCase(tempResepi.getBahan().get(x).first)) {
+            if(x == 0) {
+                currentBahanDesc = tempResepi.getBahan().get(x).first;
+
+                a = 1;
+                bahan += "\n-Bahan " + currentBahanDesc + "-\n" +
+                        a + ") " + tempResepi.getBahan().get(x).second + "\n";
+            } else if(!currentBahanDesc.equalsIgnoreCase(tempResepi.getBahan().get(x).first)) {
                 currentBahanDesc = tempResepi.getBahan().get(x).first;
 
                 a = 1;

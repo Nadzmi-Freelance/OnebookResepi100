@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -91,6 +92,7 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ibMenu:
+                buttonEffect(ibMenu);
                 slideDrawer(drawer);
                 break;
         }
@@ -120,7 +122,7 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
     // ---------------------------------------------------------------------------------------------
 
     // loader interface methods --------------------------------------------------------------------
-    public void onLoadMenuDrawer(String[] drawerMenuList, TypedArray ikonDrawerMenuList) {
+    public void onLoadMenuDrawer(String[] drawerMenuList, TypedArray ikonDrawerMenuList) { // load menu drawer listview
         ListView listViewMenu;
 
         listViewMenu = lvMenuWeakRef.get();
@@ -129,7 +131,7 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
         this.drawerMenuList = drawerMenuList;
     }
 
-    public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) {
+    public void onLoad(String[] resepiNameList, Bitmap[] bgResepiList) { // load favorite listview
         ListView listViewFavorite;
 
         listViewFavorite = lvFavoriteWeakRef.get();
@@ -143,6 +145,7 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
     public void onLoad(int category, String[] resepiNameList, Bitmap[] bgResepiList) {}
     public void onLoad(Resepi resepiInfo) {}
     public void onLoad(String[] tipsMaskan) {}
+    public void onLoad(TypedArray rempahImgList) {}
     // ---------------------------------------------------------------------------------------------
 
     // util  methods -------------------------------------------------------------------------------
@@ -151,6 +154,12 @@ public class Favorite extends AppCompatActivity implements ILoader, View.OnClick
             drawer.closeDrawer(Gravity.LEFT);
         else if(!drawer.isDrawerOpen(Gravity.LEFT))
             drawer.openDrawer(Gravity.LEFT);
+    }
+
+    private void buttonEffect(View view) {
+        AlphaAnimation buttonClick = new AlphaAnimation(1f, 0.5f);
+
+        view.startAnimation(buttonClick);
     }
     // ---------------------------------------------------------------------------------------------
 }

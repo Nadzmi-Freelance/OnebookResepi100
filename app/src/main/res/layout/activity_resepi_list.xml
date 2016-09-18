@@ -36,10 +36,31 @@
                 android:src="@drawable/ic_search_black_24dp" />
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/tvNoResult"
+            android:text="No result"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:fontFamily="serif"
+            android:visibility="gone" />
+
         <ListView
             android:id="@+id/lvResepiList"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <GridView
+            android:id="@+id/gvRempahList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:verticalSpacing="0dp"
+            android:horizontalSpacing="0dp"
+            android:numColumns="3"
+            android:columnWidth="300dp"
+            android:gravity="center" />
     </LinearLayout>
 
     <!-- The navigation drawer -->
