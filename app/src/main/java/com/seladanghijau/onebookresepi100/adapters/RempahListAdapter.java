@@ -37,13 +37,13 @@ public class RempahListAdapter extends BaseAdapter {
         holder = new ViewHolder();
         if(convertView == null) {
             holder.imageView = new ImageView(context);
-            holder.imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+            holder.imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         } else
             holder.imageView = (ImageView) convertView;
 
         holder.imageView.setImageDrawable(rempahList.getDrawable(position));
-        holder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         return holder.imageView;
     }

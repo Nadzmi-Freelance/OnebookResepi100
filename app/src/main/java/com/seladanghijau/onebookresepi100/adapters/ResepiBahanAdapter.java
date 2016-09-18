@@ -22,13 +22,12 @@ public class ResepiBahanAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater layoutInflater;
     private ArrayList<Pair<String, String>> bahan;
-    private String currDesc, prevDesc;
+    private String[] currDesc;
 
     public ResepiBahanAdapter(Context context, ArrayList<Pair<String, String>> bahan) {
         this.context = context;
         this.bahan = bahan;
-        currDesc = "";
-        prevDesc = "";
+        currDesc = new String[bahan.size()];
 
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -40,6 +39,7 @@ public class ResepiBahanAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView;
         Holder viewHolder;
+        boolean showSeperator;
 
         rowView = convertView;
         if(convertView == null) {
@@ -53,20 +53,21 @@ public class ResepiBahanAdapter extends BaseAdapter {
         } else
             viewHolder = (Holder) rowView.getTag();
 
-        currDesc = bahan.get(position).first;
+        currDesc[position] = bahan.get(position).first;
         if(position != 0)
-            if(currDesc.equalsIgnoreCase(prevDesc))
-                viewHolder.tvBahanDesc.setVisibility(View.GONE);
+            if(!currDesc[position].equalsIgnoreCase(currDesc[position-1]))
+                showSeperator = true;
             else
-                viewHolder.tvBahanDesc.setVisibility(View.VISIBLE);
+                showSeperator = false;
         else
-            viewHolder.tvBahanDesc.setVisibility(View.VISIBLE);
+            showSeperator = true;
 
-        prevDesc = currDesc;
-        currDesc = "";
-
-        viewHolder.tvBahanDesc.setText("Bahan " + bahan.get(position).first);
         viewHolder.tvBahanName.setText(bahan.get(position).second);
+        if(showSeperator) {
+            viewHolder.tvBahanDesc.setVisibility(View.VISIBLE);
+            viewHolder.tvBahanDesc.setText("Bahan " + bahan.get(position).first);
+        } else
+            viewHolder.tvBahanDesc.setVisibility(View.GONE);
 
         return rowView;
     }

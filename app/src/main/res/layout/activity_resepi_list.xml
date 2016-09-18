@@ -56,10 +56,9 @@
             android:id="@+id/gvRempahList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:verticalSpacing="0dp"
-            android:horizontalSpacing="0dp"
-            android:numColumns="3"
-            android:columnWidth="300dp"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"
+            android:numColumns="auto_fit"
             android:gravity="center" />
     </LinearLayout>
 
